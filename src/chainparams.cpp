@@ -85,7 +85,7 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
         (   1441300, uint256("0x4bc8927cd924346ac2e93110ad5d1df74a2ef490988882adfea2e6adb05c041d"))
         (   1441951, uint256("0x664a617ee047402b8066c7da73b25884297f00a71d44445b7acbfb6681272885"))
         ;
-static const Checkpoints::CCheckpointData data = {
+static const Checkpoints::CCheckpointData dataMain = {
         &mapCheckpoints,
         1626561170, // * UNIX timestamp of last checkpoint block
         1653867,   // * total number of transactions between genesis and last checkpoint
@@ -140,6 +140,10 @@ public:
         nTargetTimespan = 3.5 * 24 * 60 * 60; // 1 mars day retarget diff
         nTargetSpacing = 2.5 * 60; // Marscoin: (2 Mars minutes)
         nMaxTipAge = 24 * 60 * 60;
+        // The half life for the ASERT DAA. For every (nASERTHalfLife) seconds behind schedule the blockchain gets,
+        // difficulty is cut in half. Doubled if blocks are ahead of schedule.
+        // Two hours, push out in further upgrades as hashrate develops
+        nASERTHalfLife = 2 * 60 * 60;
 
         /**
          * Build the genesis block. Note that the output of the genesis coinbase cannot
@@ -195,7 +199,7 @@ public:
 
     const Checkpoints::CCheckpointData& Checkpoints() const 
     {
-        return data;
+        return dataMain;
     }
 };
 static CMainParams mainParams;
@@ -333,7 +337,7 @@ public:
     const Checkpoints::CCheckpointData& Checkpoints() const 
     {
         // UnitTest share the same checkpoints as MAIN
-        return data;
+        return dataMain;
     }
 
     //! Published setters to allow changing values in unit test cases
