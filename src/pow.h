@@ -31,6 +31,9 @@ unsigned int GetNextASERTWorkRequired(const CBlockIndex *pindexLast,
  */
 void ResetASERTAnchorBlockCache() noexcept;
 
+double GetMyDifficulty(const CBlockIndex* blockindex);
+double TargetToMyDifficulty(const uint256& target);
+
 /**
  * For testing purposes - get the current ASERT cache block.
  */
@@ -43,6 +46,8 @@ unsigned int GetNextWorkRequired_V1(const CBlockIndex* pindexLast, const CBlockH
 unsigned int DarkGravityWave2(const CBlockIndex* pindexLast, const CBlockHeader *pblock);
 
 unsigned int DarkGravityWave3(const CBlockIndex* pindexLast, const CBlockHeader *pblock);
+
+unsigned int GravityAsert(const CBlockIndex* pindexLast, const CBlockHeader *pblock);
 
 /** Check whether a block hash satisfies the proof-of-work requirement specified by nBits */
 bool CheckProofOfWork(uint256 hash, unsigned int nBits);

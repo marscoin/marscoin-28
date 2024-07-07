@@ -1666,6 +1666,12 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     // verify that the view's current state corresponds to the previous block
     uint256 hashPrevBlock = pindex->pprev == NULL ? uint256(0) : pindex->pprev->GetBlockHash();
+    
+    // Example of adding detailed logging just before the assertion
+    LogPrint("bench", "Preparing to connect block at height %d\n", pindex->nHeight);
+    LogPrint("bench", "hashPrevBlock: %s\n", hashPrevBlock.ToString());
+    LogPrint("bench", "Best block in view: %s\n", view.GetBestBlock().ToString());
+
     assert(hashPrevBlock == view.GetBestBlock());
 
     // Special case for the genesis block, skipping connection of its transactions
