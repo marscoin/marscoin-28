@@ -77,8 +77,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         if (pindexLast->nHeight+1 >= 126000) {
             DiffMode = 5;  // Switch to DarkGravityWave3 at height 126000
         }
-        if (pindexLast->nHeight+1 >= 2996148) {
-        //if (pindexLast->nHeight+1 >= 2999999) {  // Set this to your future height for actual ASERT activation
+        if (pindexLast->nHeight+1 >= 2999999) {  // Set this to your future height for actual ASERT activation
             DiffMode = 6;
         }
     }
@@ -427,9 +426,8 @@ unsigned int GravityAsert(const CBlockIndex* pindexLast, const CBlockHeader *pbl
     // Constants from the ASERT algorithm
     const int64_t nHalfLife = 2 * 3600; // 2 hours in seconds
     const int64_t nPowTargetSpacing = 123; // 2 Mars-minutes
-    //const int32_t nAnchorHeight = 2999999; // Fixed anchor block height
-    const int32_t nAnchorHeight = 2996148;
-
+    const int32_t nAnchorHeight = 2999999; // Fixed anchor block height
+    
     // Check if we're at the genesis block or before the anchor block
     if (pindexLast == NULL || pindexLast->nHeight < nAnchorHeight) {
         LogPrintf("Anchor block at height %d. Not active yet.\n", nAnchorHeight);
