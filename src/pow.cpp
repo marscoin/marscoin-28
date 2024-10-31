@@ -510,13 +510,14 @@ unsigned int GravityAsert(const CBlockIndex* pindexLast, const CBlockHeader *pbl
     }
 
     // Log the results
-    LogPrintf("==GravityAsert===================================\n");
-    LogPrint("bench", "Anchor Target: %s\n", bnAnchorTarget.GetHex());
-    LogPrint("bench", "Next Target: %s\n", bnNext.GetHex());
+    
+    LogPrintf("Anchor Target: %s\n", bnAnchorTarget.GetHex());
+    LogPrintf("Next Target: %s\n", bnNext.GetHex());
+    LogPrintf("Next Target uint: %s\n", uint256(bnNext.GetHex()).ToString());
     double nextDifficulty = TargetToMyDifficulty(uint256(bnNext.GetHex()));
     LogPrintf("ASERT Next Target difficulty: %f\n", nextDifficulty);
     double currentDifficulty = GetMyDifficulty(pindexLast);
     LogPrintf("Current difficulty: %f\n", currentDifficulty);
-
+    LogPrintf("==GravityAsertComplete===================================\n");
     return bnNext.GetCompact();
 }
