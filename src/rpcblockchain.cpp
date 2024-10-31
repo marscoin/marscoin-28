@@ -680,3 +680,38 @@ Value reconsiderblock(const Array& params, bool fHelp)
 
     return Value::null;
 }
+
+
+Value checkpow(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "checkpow \"hash\"\n"
+            "\nRechecks the Proof of Work for a given block.\n"
+            "\nArguments:\n"
+            "1. hash   (string, required) The hash of the block to check\n"
+            "\nResult:\n"
+            "true if the PoW is valid, false otherwise\n"
+            "\nExamples:\n"
+            + HelpExampleCli("checkpow", "\"blockhash\"")
+            + HelpExampleRpc("checkpow", "\"blockhash\"")
+        );
+
+    std::string strHash = params[0].get_str();
+    uint256 hash(strHash);
+    CValidationState state;
+
+    {
+        LOCK(cs_main);
+        if (mapBlockIndex.count(hash) == 0)
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Block not found");
+
+        CBlockIndex* pblockindex = mapBlockIndex[hash];
+        const CBlockHeader& pblock = pblockindex->GetBlockHeader(); // Use reference to avoid copy
+
+        unsigned int nRequired = GetNextWorkRequired(pblockindex->pprev, &pblock); // Make sure GetNextWorkRequired expects a pointer
+        bool fValid = CheckProofOfWork(pblock.GetHash(), nRequired); // Use '.' since pblock is a reference now
+
+        return fValid;
+    }
+}

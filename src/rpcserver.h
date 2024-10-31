@@ -239,6 +239,7 @@ extern json_spirit::Value verifychain(const json_spirit::Array& params, bool fHe
 extern json_spirit::Value getchaintips(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value invalidateblock(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value reconsiderblock(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value checkpow(const json_spirit::Array& params, bool fHelp);
 
 // in rest.cpp
 extern bool HTTPReq_REST(AcceptedConnection *conn,

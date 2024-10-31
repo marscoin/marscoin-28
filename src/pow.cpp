@@ -427,18 +427,24 @@ unsigned int GravityAsert(const CBlockIndex* pindexLast, const CBlockHeader *pbl
     const int64_t nHalfLife = 2 * 3600; // 2 hours in seconds
     const int64_t nPowTargetSpacing = 123; // 2 Mars-minutes
     const int32_t nAnchorHeight = 2999999; // Fixed anchor block height
-    
+
+    LogPrintf("Starting GravityAsert calculation\n");
+
     // Check if we're at the genesis block or before the anchor block
     if (pindexLast == NULL || pindexLast->nHeight < nAnchorHeight) {
         LogPrintf("Anchor block at height %d. Not active yet.\n", nAnchorHeight);
         return Params().ProofOfWorkLimit().GetCompact();
     }
 
+    LogPrintf("Last block height: %d\n", pindexLast->nHeight);
+
     // Find the anchor block
     const CBlockIndex* pindexAnchor = pindexLast;
     while (pindexAnchor && pindexAnchor->nHeight > nAnchorHeight) {
+        //LogPrintf("Traversing to block height: %d\n", pindexAnchor->nHeight);
         pindexAnchor = pindexAnchor->pprev;
     }
+
     if (pindexAnchor == NULL || pindexAnchor->nHeight != nAnchorHeight) {
         // This shouldn't happen if the blockchain is valid
         LogPrintf("Error: Anchor block at height %d not found\n", nAnchorHeight);
@@ -449,29 +455,45 @@ unsigned int GravityAsert(const CBlockIndex* pindexLast, const CBlockHeader *pbl
     int64_t nTimeDiff = pindexLast->GetBlockTime() - pindexAnchor->GetBlockTime();
     int64_t nHeightDiff = pindexLast->nHeight - pindexAnchor->nHeight;
 
+    LogPrintf("Time difference: %lld\n", nTimeDiff);
+    LogPrintf("Height difference: %lld\n", nHeightDiff);
+
     // Get the anchor block target
     CBigNum bnAnchorTarget;
     bnAnchorTarget.SetCompact(pindexAnchor->nBits);
 
+    LogPrintf("Anchor target set from bits: %u\n", pindexAnchor->nBits);
+
     // Calculate the exponent
     int64_t exponent = ((nTimeDiff - nPowTargetSpacing * (nHeightDiff + 1)) * 65536) / nHalfLife;
+
+    LogPrintf("Calculated exponent: %lld\n", exponent);
 
     // Decompose exponent into integer and fractional parts
     int64_t shifts = exponent >> 16;
     uint16_t frac = (uint16_t)exponent;
 
+    LogPrintf("Shifts (integer part of exponent): %lld\n", shifts);
+    LogPrintf("Fractional part of exponent: %u\n", frac);
+
     // Calculate the factor for the fractional part
     uint64_t factor = 65536ULL + ((195766423245049ULL * frac + 971821376ULL * frac * frac +
                                    5127ULL * frac * frac * frac + (1ULL << 47)) >> 48);
 
+    LogPrintf("Calculated factor: %llu\n", factor);
+
     // Calculate next target
     CBigNum bnNext = bnAnchorTarget * factor;
+
+    LogPrintf("Calculated next target before shift adjustments\n");
 
     // Apply the integer shifts
     shifts -= 16;
     if (shifts < 0) {
+        LogPrintf("Shifting right by: %lld\n", -shifts);
         bnNext >>= -shifts;
     } else if (shifts > 0) {
+        LogPrintf("Shifting left by: %lld\n", shifts);
         bnNext <<= shifts;
     }
 
@@ -479,9 +501,11 @@ unsigned int GravityAsert(const CBlockIndex* pindexLast, const CBlockHeader *pbl
     CBigNum bnPowLimit;
     bnPowLimit.SetCompact(Params().ProofOfWorkLimit().GetCompact());
     if (bnNext > bnPowLimit) {
+        LogPrintf("Adjusting next target to proof of work limit\n");
         bnNext = bnPowLimit;
     }
     if (bnNext == 0) {
+        LogPrintf("Adjusting next target from 0 to 1\n");
         bnNext = 1;
     }
 
@@ -493,5 +517,6 @@ unsigned int GravityAsert(const CBlockIndex* pindexLast, const CBlockHeader *pbl
     LogPrintf("ASERT Next Target difficulty: %f\n", nextDifficulty);
     double currentDifficulty = GetMyDifficulty(pindexLast);
     LogPrintf("Current difficulty: %f\n", currentDifficulty);
+
     return bnNext.GetCompact();
 }
