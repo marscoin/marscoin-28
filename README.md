@@ -20,7 +20,7 @@ Marscoin targets to become the blockchain for Mars, and functions as a proof of 
 - confirmation block every 2 Mars minutes (123 seconds)
 - subsidy halves every Mars year (668 sols)
 - 721 blocks per sol
-- 40 million total coins by 2024
+- 40 million total coins by ~2025 (39569900 exactly)
 - 1M donation for non-profit The Mars Society
 - developed and supported by The Marscoin Foundation, LLC (a non-profit).
 - check out the MartianRepublic.org for our experimental governance platform
