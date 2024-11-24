@@ -32,14 +32,30 @@ bool dockClickHandler(id self,SEL _cmd,...) {
 
 void setupDockClickHandler() {
     Class cls = objc_getClass("NSApplication");
-    id appInst = objc_msgSend((id)cls, sel_registerName("sharedApplication"));
+    id (*objc_msgSendTyped)(id, SEL) = (id (*)(id, SEL))objc_msgSend;
+    id appInst = objc_msgSendTyped(cls, sel_registerName("sharedApplication"));
+
+    //id appInst = objc_msgSend((id)cls, sel_registerName("sharedApplication"));
     
     if (appInst != NULL) {
-        id delegate = objc_msgSend(appInst, sel_registerName("delegate"));
-        Class delClass = (Class)objc_msgSend(delegate,  sel_registerName("class"));
+        // Define a function pointer for objc_msgSend with two arguments
+        id (*objc_msgSendTypedWithArg)(id, SEL, id) = (id (*)(id, SEL, id))objc_msgSend;
+
+        // Set the delegate
+        id delegate = objc_msgSendTypedWithArg(appInst, sel_registerName("delegate"), nil);
+
+        // Retrieve the delegate's class
+        Class delClass = (Class)objc_msgSendTyped(delegate, sel_registerName("class"));
+
         SEL shouldHandle = sel_registerName("applicationShouldHandleReopen:hasVisibleWindows:");
-        if (class_getInstanceMethod(delClass, shouldHandle))
+        if (class_getInstanceMethod(delClass, shouldHandle)) {
             class_replaceMethod(delClass, shouldHandle, (IMP)dockClickHandler, "B@:");
+        }
+//        id delegate = objc_msgSend(appInst, sel_registerName("delegate"));
+//        Class delClass = (Class)objc_msgSend(delegate,  sel_registerName("class"));
+//        SEL shouldHandle = sel_registerName("applicationShouldHandleReopen:hasVisibleWindows:");
+//        if (class_getInstanceMethod(delClass, shouldHandle))
+//            class_replaceMethod(delClass, shouldHandle, (IMP)dockClickHandler, "B@:");
         else
             class_addMethod(delClass, shouldHandle, (IMP)dockClickHandler,"B@:");
     }
