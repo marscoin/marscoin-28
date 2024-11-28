@@ -554,7 +554,12 @@ bool PaymentServer::processPaymentRequest(PaymentRequestPlus& request, SendCoins
     QList<std::pair<CScript, CAmount> > sendingTos = request.getPayTo();
     QStringList addresses;
 
-    foreach(const PAIRTYPE(CScript, CAmount)& sendingTo, sendingTos) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    for (const PAIRTYPE(CScript, CAmount)& sendingTo : sendingTos)
+#else
+    foreach(const PAIRTYPE(CScript, CAmount)& sendingTo, sendingTos)
+#endif
+{
         // Extract and check destination addresses
         CTxDestination dest;
         if (ExtractDestination(sendingTo.first, dest)) {
@@ -649,7 +654,12 @@ void PaymentServer::fetchPaymentACK(CWallet* wallet, SendCoinsRecipient recipien
         }
     }
 
+#if GOOGLE_PROTOBUF_VERSION >= 3000000
+    int length = payment.ByteSizeLong();
+#else
     int length = payment.ByteSize();
+#endif
+
     netRequest.setHeader(QNetworkRequest::ContentLengthHeader, length);
     QByteArray serData(length, '\0');
     if (payment.SerializeToArray(serData.data(), length)) {
