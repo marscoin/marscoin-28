@@ -1029,12 +1029,19 @@ bool BlockManager::WriteUndoDataForBlock(const CBlockUndo& blockundo, BlockValid
     return true;
 }
 
-bool BlockManager::ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos) const
+namespace
+{
+
+/* Generic implementation of block reading that can handle
+   both a block and its header.  */
+
+template<typename T>
+bool ReadBlockOrHeader(T& block, const FlatFilePos& pos, const BlockManager& blockman)
 {
     block.SetNull();
 
     // Open history file to read
-    AutoFile filein{OpenBlockFile(pos, true)};
+    AutoFile filein{blockman.OpenBlockFile(pos, true)};
     if (filein.IsNull()) {
         LogError("%s: OpenBlockFile failed for %s\n", __func__, pos.ToString());
         return false;
@@ -1049,13 +1056,13 @@ bool BlockManager::ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos) cons
     }
 
     // Check the header
-    if (!CheckProofOfWork(block.GetPoWHash(), block.nBits, GetConsensus())) {
+    if (!CheckProofOfWork(block, blockman.GetConsensus())) {
         LogError("%s: Errors in block header at %s\n", __func__, pos.ToString());
         return false;
     }
 
     // Signet only: check block solution
-    if (GetConsensus().signet_blocks && !CheckSignetBlockSolution(block, GetConsensus())) {
+    if (blockman.GetConsensus().signet_blocks && !CheckSignetBlockSolution(block, blockman.GetConsensus())) {
         LogError("%s: Errors in block solution at %s\n", __func__, pos.ToString());
         return false;
     }
@@ -1063,11 +1070,12 @@ bool BlockManager::ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos) cons
     return true;
 }
 
-bool BlockManager::ReadBlockFromDisk(CBlock& block, const CBlockIndex& index) const
+template<typename T>
+bool ReadBlockOrHeader(T& block, const CBlockIndex& index, const BlockManager& blockman)
 {
     const FlatFilePos block_pos{WITH_LOCK(cs_main, return index.GetBlockPos())};
 
-    if (!ReadBlockFromDisk(block, block_pos)) {
+    if (!ReadBlockOrHeader(block, block_pos, blockman)) {
         return false;
     }
     if (block.GetHash() != index.GetBlockHash()) {
@@ -1075,6 +1083,23 @@ bool BlockManager::ReadBlockFromDisk(CBlock& block, const CBlockIndex& index) co
         return false;
     }
     return true;
+}
+
+} // anonymous namespace
+
+bool BlockManager::ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos) const
+{
+    return ReadBlockOrHeader(block, pos, *this);
+}
+
+bool BlockManager::ReadBlockFromDisk(CBlock& block, const CBlockIndex& index) const
+{
+    return ReadBlockOrHeader(block, index, *this);
+}
+
+bool BlockManager::ReadBlockHeaderFromDisk(CBlockHeader& block, const CBlockIndex& index) const
+{
+    return ReadBlockOrHeader(block, index, *this);
 }
 
 bool BlockManager::ReadRawBlockFromDisk(std::vector<uint8_t>& block, const FlatFilePos& pos) const

@@ -108,6 +108,7 @@ struct Params {
     /** Proof of work parameters */
     uint256 powLimit;
     bool fPowAllowMinDifficultyBlocks;
+    int64_t nMinDifficultySince;
     /**
       * Enfore BIP94 timewarp attack mitigation. On testnet4 this also enforces
       * the block storm mitigation.
@@ -149,6 +150,37 @@ struct Params {
             return SegwitHeight;
         } // no default case, so the compiler can warn about missing cases
         return std::numeric_limits<int>::max();
+    }
+
+    /** Auxpow parameters */
+    int32_t nAuxpowChainId;
+    int nAuxpowStartHeight;
+    bool fStrictChainId;
+    int nLegacyBlocksBefore; // -1 for "always allow"
+
+    /**
+     * Check whether or not minimum difficulty blocks are allowed
+     * with the given time stamp.
+     * @param nBlockTime Time of the block with minimum difficulty.
+     * @return True if it is allowed to have minimum difficulty.
+     */
+    bool AllowMinDifficultyBlocks(int64_t nBlockTime) const
+    {
+        if (!fPowAllowMinDifficultyBlocks)
+            return false;
+        return nBlockTime > nMinDifficultySince;
+    }
+
+    /**
+     * Check whether or not to allow legacy blocks at the given height.
+     * @param nHeight Height of the block to check.
+     * @return True if it is allowed to have a legacy version.
+     */
+    bool AllowLegacyBlocks(unsigned nHeight) const
+    {
+        if (nLegacyBlocksBefore < 0)
+            return true;
+        return static_cast<int> (nHeight) < nLegacyBlocksBefore;
     }
 };
 
