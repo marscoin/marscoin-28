@@ -2,18 +2,18 @@
 
 *.exe
 *.pdb
-src/bitcoin
-src/bitcoind
-src/bitcoin-cli
-src/bitcoin-gui
-src/bitcoin-node
-src/bitcoin-tx
-src/bitcoin-util
-src/bitcoin-chainstate
-src/bitcoin-wallet
+src/marscoin
+src/marscoind
+src/marscoin-cli
+src/marscoin-gui
+src/marscoin-node
+src/marscoin-tx
+src/marscoin-util
+src/marscoin-chainstate
+src/marscoin-wallet
 src/test/fuzz/fuzz
-src/test/test_bitcoin
-src/qt/test/test_bitcoin-qt
+src/test/test_marscoin
+src/qt/test/test_marscoin-qt
 
 # autoreconf
 Makefile.in
@@ -50,11 +50,11 @@ src/qt/forms/ui_*.h
 
 src/qt/test/moc*.cpp
 
-src/qt/bitcoin-qt.config
-src/qt/bitcoin-qt.creator
-src/qt/bitcoin-qt.creator.user
-src/qt/bitcoin-qt.files
-src/qt/bitcoin-qt.includes
+src/qt/marscoin-qt.config
+src/qt/marscoin-qt.creator
+src/qt/marscoin-qt.creator.user
+src/qt/marscoin-qt.files
+src/qt/marscoin-qt.includes
 
 .deps
 .dirstamp
@@ -92,7 +92,7 @@ src/qt/bitcoin-qt.includes
 *.qm
 Makefile
 !depends/Makefile
-src/qt/bitcoin-qt
+src/qt/marscoin-qt
 Bitcoin-Qt.app
 
 # Qt Creator
@@ -100,7 +100,7 @@ Makefile.am.user
 
 # Unit-tests
 Makefile.test
-bitcoin-qt_test
+marscoin-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -116,7 +116,7 @@ releases
 *.gcno
 *.gcda
 /*.info
-test_bitcoin.coverage/
+test_marscoin.coverage/
 total.coverage/
 fuzz.coverage/
 coverage_percent.txt

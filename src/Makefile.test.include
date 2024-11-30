@@ -7,11 +7,11 @@ noinst_PROGRAMS += test/fuzz/fuzz
 endif
 
 if ENABLE_TESTS
-bin_PROGRAMS += test/test_bitcoin
+bin_PROGRAMS += test/test_marscoin
 endif
 
 TEST_SRCDIR = test
-TEST_BINARY=test/test_bitcoin$(EXEEXT)
+TEST_BINARY=test/test_marscoin$(EXEEXT)
 FUZZ_BINARY=test/fuzz/fuzz$(EXEEXT)
 
 JSON_TEST_FILES = \
@@ -229,18 +229,18 @@ BITCOIN_TESTS += test/ipc_tests.cpp
 
 # Build ipc_test code in a separate library so it can be compiled with custom
 # LIBMULTIPROCESS_CFLAGS without those flags affecting other tests
-LIBBITCOIN_IPC_TEST=libbitcoin_ipc_test.a
+LIBBITCOIN_IPC_TEST=libmarscoin_ipc_test.a
 EXTRA_LIBRARIES += $(LIBBITCOIN_IPC_TEST)
-libbitcoin_ipc_test_a_SOURCES = \
+libmarscoin_ipc_test_a_SOURCES = \
   test/ipc_test.cpp \
   test/ipc_test.h
-libbitcoin_ipc_test_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libbitcoin_ipc_test_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) $(LIBMULTIPROCESS_CFLAGS)
+libmarscoin_ipc_test_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libmarscoin_ipc_test_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) $(LIBMULTIPROCESS_CFLAGS)
 
 # Generate various .c++/.h files from the ipc_test.capnp file
 include $(MPGEN_PREFIX)/include/mpgen.mk
 EXTRA_DIST += test/ipc_test.capnp
-libbitcoin_ipc_test_mpgen_output = \
+libmarscoin_ipc_test_mpgen_output = \
   test/ipc_test.capnp.c++ \
   test/ipc_test.capnp.h \
   test/ipc_test.capnp.proxy-client.c++ \
@@ -248,34 +248,34 @@ libbitcoin_ipc_test_mpgen_output = \
   test/ipc_test.capnp.proxy-types.c++ \
   test/ipc_test.capnp.proxy-types.h \
   test/ipc_test.capnp.proxy.h
-nodist_libbitcoin_ipc_test_a_SOURCES = $(libbitcoin_ipc_test_mpgen_output)
-CLEANFILES += $(libbitcoin_ipc_test_mpgen_output)
+nodist_libmarscoin_ipc_test_a_SOURCES = $(libmarscoin_ipc_test_mpgen_output)
+CLEANFILES += $(libmarscoin_ipc_test_mpgen_output)
 endif
 
 # Explicitly list dependencies on generated headers as described in
 # https://www.gnu.org/software/automake/manual/html_node/Built-Sources-Example.html#Recording-Dependencies-manually
-test/libbitcoin_ipc_test_a-ipc_test.$(OBJEXT): test/ipc_test.capnp.h
+test/libmarscoin_ipc_test_a-ipc_test.$(OBJEXT): test/ipc_test.capnp.h
 
-test_test_bitcoin_SOURCES = $(BITCOIN_TEST_SUITE) $(BITCOIN_TESTS) $(JSON_TEST_FILES) $(RAW_TEST_FILES)
-test_test_bitcoin_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(TESTDEFS) $(BOOST_CPPFLAGS) $(EVENT_CFLAGS)
-test_test_bitcoin_LDADD = $(LIBTEST_UTIL)
+test_test_marscoin_SOURCES = $(BITCOIN_TEST_SUITE) $(BITCOIN_TESTS) $(JSON_TEST_FILES) $(RAW_TEST_FILES)
+test_test_marscoin_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(TESTDEFS) $(BOOST_CPPFLAGS) $(EVENT_CFLAGS)
+test_test_marscoin_LDADD = $(LIBTEST_UTIL)
 if ENABLE_WALLET
-test_test_bitcoin_LDADD += $(LIBBITCOIN_WALLET)
-test_test_bitcoin_CPPFLAGS += $(BDB_CPPFLAGS)
+test_test_marscoin_LDADD += $(LIBBITCOIN_WALLET)
+test_test_marscoin_CPPFLAGS += $(BDB_CPPFLAGS)
 endif
 if BUILD_MULTIPROCESS
-test_test_bitcoin_LDADD += $(LIBBITCOIN_IPC_TEST) $(LIBMULTIPROCESS_LIBS)
+test_test_marscoin_LDADD += $(LIBBITCOIN_IPC_TEST) $(LIBMULTIPROCESS_LIBS)
 endif
 
-test_test_bitcoin_LDADD += $(LIBBITCOIN_NODE) $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) \
+test_test_marscoin_LDADD += $(LIBBITCOIN_NODE) $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) \
   $(LIBLEVELDB) $(LIBMEMENV) $(LIBSECP256K1) $(EVENT_LIBS) $(EVENT_PTHREADS_LIBS) $(MINISKETCH_LIBS)
-test_test_bitcoin_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+test_test_marscoin_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
-test_test_bitcoin_LDADD += $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(SQLITE_LIBS)
-test_test_bitcoin_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS) -static
+test_test_marscoin_LDADD += $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(SQLITE_LIBS)
+test_test_marscoin_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS) -static
 
 if ENABLE_ZMQ
-test_test_bitcoin_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
+test_test_marscoin_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 FUZZ_SUITE_LD_COMMON += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 endif
 
@@ -409,7 +409,7 @@ test_fuzz_fuzz_SOURCES = \
  test/fuzz/versionbits.cpp
 endif # ENABLE_FUZZ_BINARY
 
-nodist_test_test_bitcoin_SOURCES = $(GENERATED_TEST_FILES)
+nodist_test_test_marscoin_SOURCES = $(GENERATED_TEST_FILES)
 
 $(BITCOIN_TESTS): $(GENERATED_TEST_FILES)
 
@@ -418,20 +418,20 @@ CLEAN_BITCOIN_TEST = test/*.gcda test/*.gcno test/fuzz/*.gcda test/fuzz/*.gcno t
 CLEANFILES += $(CLEAN_BITCOIN_TEST)
 
 if TARGET_WINDOWS
-bitcoin_test: $(TEST_BINARY)
+marscoin_test: $(TEST_BINARY)
 else
 if ENABLE_BENCH
-bitcoin_test: $(TEST_BINARY) $(BENCH_BINARY)
+marscoin_test: $(TEST_BINARY) $(BENCH_BINARY)
 else
-bitcoin_test: $(TEST_BINARY)
+marscoin_test: $(TEST_BINARY)
 endif
 endif
 
-bitcoin_test_check: $(TEST_BINARY) FORCE
+marscoin_test_check: $(TEST_BINARY) FORCE
 	$(MAKE) check-TESTS TESTS=$^
 
-bitcoin_test_clean : FORCE
-	rm -f $(CLEAN_BITCOIN_TEST) $(test_test_bitcoin_OBJECTS) $(TEST_BINARY)
+marscoin_test_clean : FORCE
+	rm -f $(CLEAN_BITCOIN_TEST) $(test_test_marscoin_OBJECTS) $(TEST_BINARY)
 
 check-unit: $(BITCOIN_TESTS:.cpp=.cpp.test)
 

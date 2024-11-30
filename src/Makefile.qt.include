@@ -2,15 +2,15 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-bin_PROGRAMS += qt/bitcoin-qt
+bin_PROGRAMS += qt/marscoin-qt
 
 if BUILD_BITCOIN_GUI
-  bin_PROGRAMS += bitcoin-gui
+  bin_PROGRAMS += marscoin-gui
 endif
 
-EXTRA_LIBRARIES += qt/libbitcoinqt.a
+EXTRA_LIBRARIES += qt/libmarscoinqt.a
 
-# bitcoin qt core #
+# marscoin qt core #
 include Makefile.qt_locale.include
 
 QT_FORMS_UI = \
@@ -294,18 +294,18 @@ BITCOIN_QT_RC = qt/res/bitcoin-qt-res.rc
 
 BITCOIN_QT_INCLUDES = -DQT_NO_KEYWORDS -DQT_USE_QSTRINGBUILDER
 
-qt_libbitcoinqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
+qt_libmarscoinqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
   $(QT_INCLUDES) $(QT_DBUS_INCLUDES) $(QR_CFLAGS) $(BOOST_CPPFLAGS)
-qt_libbitcoinqt_a_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
-qt_libbitcoinqt_a_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) $(QT_PIE_FLAGS)
+qt_libmarscoinqt_a_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
+qt_libmarscoinqt_a_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) $(QT_PIE_FLAGS)
 
-qt_libbitcoinqt_a_SOURCES = $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(QT_FORMS_UI) \
+qt_libmarscoinqt_a_SOURCES = $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(QT_FORMS_UI) \
   $(QT_QRC) $(QT_QRC_LOCALE) $(QT_TS) $(QT_RES_FONTS) $(QT_RES_ICONS) $(QT_RES_ANIMATION)
 if TARGET_DARWIN
-  qt_libbitcoinqt_a_SOURCES += $(BITCOIN_MM)
+  qt_libmarscoinqt_a_SOURCES += $(BITCOIN_MM)
 endif
 
-nodist_qt_libbitcoinqt_a_SOURCES = $(QT_MOC_CPP) $(QT_MOC) $(QT_QRC_CPP) $(QT_QRC_LOCALE_CPP)
+nodist_qt_libmarscoinqt_a_SOURCES = $(QT_MOC_CPP) $(QT_MOC) $(QT_QRC_CPP) $(QT_QRC_LOCALE_CPP)
 
 # forms/foo.h -> forms/ui_foo.h
 QT_FORMS_H=$(join $(dir $(QT_FORMS_UI)),$(addprefix ui_, $(notdir $(QT_FORMS_UI:.ui=.h))))
@@ -313,43 +313,43 @@ QT_FORMS_H=$(join $(dir $(QT_FORMS_UI)),$(addprefix ui_, $(notdir $(QT_FORMS_UI:
 # Most files will depend on the forms and moc files as includes. Generate them
 # before anything else.
 $(QT_MOC): $(QT_FORMS_H)
-$(qt_libbitcoinqt_a_OBJECTS) $(qt_bitcoin_qt_OBJECTS) $(bitcoin_gui_OBJECTS) : | $(QT_MOC)
+$(qt_libmarscoinqt_a_OBJECTS) $(qt_marscoin_qt_OBJECTS) $(marscoin_gui_OBJECTS) : | $(QT_MOC)
 
 # bitcoin-qt and bitcoin-gui binaries #
-bitcoin_qt_cppflags = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
+marscoin_qt_cppflags = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
   $(QT_INCLUDES) $(QR_CFLAGS)
-bitcoin_qt_cxxflags = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
+marscoin_qt_cxxflags = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 
-bitcoin_qt_sources = qt/main.cpp
+marscoin_qt_sources = qt/main.cpp
 if TARGET_WINDOWS
-  bitcoin_qt_sources += $(BITCOIN_QT_RC)
+  marscoin_qt_sources += $(BITCOIN_QT_RC)
 endif
-bitcoin_qt_ldadd = qt/libbitcoinqt.a $(LIBBITCOIN_NODE)
+marscoin_qt_ldadd = qt/libmarscoinqt.a $(LIBBITCOIN_NODE)
 if ENABLE_WALLET
-bitcoin_qt_ldadd += $(LIBBITCOIN_UTIL) $(LIBBITCOIN_WALLET)
+marscoin_qt_ldadd += $(LIBBITCOIN_UTIL) $(LIBBITCOIN_WALLET)
 endif
 if ENABLE_ZMQ
-bitcoin_qt_ldadd += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
+marscoin_qt_ldadd += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 endif
-bitcoin_qt_ldadd += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
+marscoin_qt_ldadd += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
   $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(LIBSECP256K1) \
   $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(SQLITE_LIBS)
-bitcoin_qt_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
-bitcoin_qt_libtoolflags = $(AM_LIBTOOLFLAGS) --tag CXX
+marscoin_qt_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+marscoin_qt_libtoolflags = $(AM_LIBTOOLFLAGS) --tag CXX
 
-qt_bitcoin_qt_CPPFLAGS = $(bitcoin_qt_cppflags)
-qt_bitcoin_qt_CXXFLAGS = $(bitcoin_qt_cxxflags)
-qt_bitcoin_qt_SOURCES = $(bitcoin_qt_sources) init/bitcoin-qt.cpp
-qt_bitcoin_qt_LDADD = $(bitcoin_qt_ldadd)
-qt_bitcoin_qt_LDFLAGS = $(bitcoin_qt_ldflags)
-qt_bitcoin_qt_LIBTOOLFLAGS = $(bitcoin_qt_libtoolflags)
+qt_marscoin_qt_CPPFLAGS = $(marscoin_qt_cppflags)
+qt_marscoin_qt_CXXFLAGS = $(marscoin_qt_cxxflags)
+qt_marscoin_qt_SOURCES = $(marscoin_qt_sources) init/bitcoin-qt.cpp
+qt_marscoin_qt_LDADD = $(marscoin_qt_ldadd)
+qt_marscoin_qt_LDFLAGS = $(marscoin_qt_ldflags)
+qt_marscoin_qt_LIBTOOLFLAGS = $(marscoin_qt_libtoolflags)
 
-bitcoin_gui_CPPFLAGS = $(bitcoin_qt_cppflags)
-bitcoin_gui_CXXFLAGS = $(bitcoin_qt_cxxflags)
-bitcoin_gui_SOURCES = $(bitcoin_qt_sources) init/bitcoin-gui.cpp
-bitcoin_gui_LDADD = $(bitcoin_qt_ldadd) $(LIBBITCOIN_IPC) $(LIBBITCOIN_UTIL) $(LIBMULTIPROCESS_LIBS)
-bitcoin_gui_LDFLAGS = $(bitcoin_qt_ldflags)
-bitcoin_gui_LIBTOOLFLAGS = $(bitcoin_qt_libtoolflags)
+marscoin_gui_CPPFLAGS = $(marscoin_qt_cppflags)
+marscoin_gui_CXXFLAGS = $(marscoin_qt_cxxflags)
+marscoin_gui_SOURCES = $(marscoin_qt_sources) init/bitcoin-gui.cpp
+marscoin_gui_LDADD = $(marscoin_qt_ldadd) $(LIBBITCOIN_IPC) $(LIBBITCOIN_UTIL) $(LIBMULTIPROCESS_LIBS)
+marscoin_gui_LDFLAGS = $(marscoin_qt_ldflags)
+marscoin_gui_LIBTOOLFLAGS = $(marscoin_qt_libtoolflags)
 
 #locale/foo.ts -> locale/foo.qm
 QT_QM=$(QT_TS:.ts=.qm)
@@ -359,11 +359,11 @@ SECONDARY: $(QT_QM)
 $(srcdir)/qt/bitcoinstrings.cpp: FORCE
 	@test -n $(XGETTEXT) || echo "xgettext is required for updating translations"
 	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) COPYRIGHT_HOLDERS="$(COPYRIGHT_HOLDERS)" $(PYTHON) ../share/qt/extract_strings_qt.py \
-    $(libbitcoin_node_a_SOURCES) $(libbitcoin_wallet_a_SOURCES) $(libbitcoin_common_a_SOURCES) \
-    $(libbitcoin_zmq_a_SOURCES) $(libbitcoin_consensus_a_SOURCES) $(libbitcoin_util_a_SOURCES) \
+    $(libmarscoin_node_a_SOURCES) $(libmarscoin_wallet_a_SOURCES) $(libmarscoin_common_a_SOURCES) \
+    $(libmarscoin_zmq_a_SOURCES) $(libmarscoin_consensus_a_SOURCES) $(libmarscoin_util_a_SOURCES) \
     $(BITCOIN_QT_BASE_CPP) $(BITCOIN_QT_WINDOWS_CPP) $(BITCOIN_QT_WALLET_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
 
-# The resulted bitcoin_en.xlf source file should follow Transifex requirements.
+# The resulted marscoin_en.xlf source file should follow Transifex requirements.
 # See: https://docs.transifex.com/formats/xliff#how-to-distinguish-between-a-source-file-and-a-translation-file
 translate: $(srcdir)/qt/bitcoinstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_BASE_CPP) $(BITCOIN_QT_WINDOWS_CPP) $(BITCOIN_QT_WALLET_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
@@ -383,14 +383,14 @@ $(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(QT_RES_FONTS) $(QT_RES_ICONS) $(QT_RES_
 	@test -f $(RCC) || (echo "rcc $(RCC) not found, but is required for generating qrc cpp files"; exit 1)
 	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name bitcoin --format-version 1 $< > $@
 
-CLEAN_QT = $(nodist_qt_libbitcoinqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_bitcoin_locale.qrc
+CLEAN_QT = $(nodist_qt_libmarscoinqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_bitcoin_locale.qrc
 
 CLEANFILES += $(CLEAN_QT)
 
-bitcoin_qt_clean: FORCE
-	rm -f $(CLEAN_QT) $(qt_libbitcoinqt_a_OBJECTS) $(qt_bitcoin_qt_OBJECTS) qt/bitcoin-qt$(EXEEXT) $(LIBBITCOINQT)
+marscoin_qt_clean: FORCE
+	rm -f $(CLEAN_QT) $(qt_libmarscoinqt_a_OBJECTS) $(qt_marscoin_qt_OBJECTS) qt/bitcoin-qt$(EXEEXT) $(LIBBITCOINQT)
 
-bitcoin_qt : qt/bitcoin-qt$(EXEEXT)
+marscoin_qt : qt/bitcoin-qt$(EXEEXT)
 
 ui_%.h: %.ui
 	@test -f $(UIC) || (echo "uic $(UIC) not found, but is required for generating ui headers"; exit 1)

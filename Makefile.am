@@ -28,7 +28,7 @@ BITCOIN_WIN_INSTALLER=$(PACKAGE)-$(PACKAGE_VERSION)-win64-setup$(EXEEXT)
 empty :=
 space := $(empty) $(empty)
 
-OSX_APP=Bitcoin-Qt.app
+OSX_APP=Marscoin-Qt.app
 OSX_VOLNAME = $(subst $(space),-,$(PACKAGE_NAME))
 OSX_ZIP = $(OSX_VOLNAME).zip
 OSX_DEPLOY_SCRIPT=$(top_srcdir)/contrib/macdeploy/macdeployqtplus
@@ -60,9 +60,9 @@ OSX_PACKAGING = $(OSX_DEPLOY_SCRIPT) $(OSX_INSTALLER_ICONS) \
   $(top_srcdir)/contrib/macdeploy/detached-sig-create.sh
 
 COVERAGE_INFO = $(COV_TOOL_WRAPPER) baseline.info \
-  test_bitcoin_filtered.info total_coverage.info \
+  test_marscoin_filtered.info total_coverage.info \
   baseline_filtered.info functional_test.info functional_test_filtered.info \
-  test_bitcoin_coverage.info test_bitcoin.info fuzz.info fuzz_filtered.info fuzz_coverage.info
+  test_marscoin_coverage.info test_marscoin.info fuzz.info fuzz_filtered.info fuzz_coverage.info
 
 dist-hook:
 	-$(GIT) archive --format=tar HEAD -- src/clientversion.cpp | $(AMTAR) -C $(top_distdir) -xf -
@@ -101,7 +101,7 @@ $(OSX_APP)/Contents/Resources/bitcoin.icns: $(OSX_INSTALLER_ICONS)
 	$(MKDIR_P) $(@D)
 	$(INSTALL_DATA) $< $@
 
-$(OSX_APP)/Contents/MacOS/Bitcoin-Qt: all-recursive
+$(OSX_APP)/Contents/MacOS/Marscoin-Qt: all-recursive
 	$(MKDIR_P) $(@D)
 	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM)  $(BITCOIN_QT_BIN) $@
 
@@ -111,7 +111,7 @@ $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings:
 
 OSX_APP_BUILT=$(OSX_APP)/Contents/PkgInfo $(OSX_APP)/Contents/Resources/empty.lproj \
   $(OSX_APP)/Contents/Resources/bitcoin.icns $(OSX_APP)/Contents/Info.plist \
-  $(OSX_APP)/Contents/MacOS/Bitcoin-Qt $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings
+  $(OSX_APP)/Contents/MacOS/Marscoin-Qt $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings
 
 if BUILD_DARWIN
 $(OSX_ZIP): $(OSX_APP_BUILT) $(OSX_PACKAGING)
@@ -125,10 +125,10 @@ $(OSX_ZIP): deploydir
 	if [ -n "$(SOURCE_DATE_EPOCH)" ]; then find $(APP_DIST_DIR) -exec touch -d @$(SOURCE_DATE_EPOCH) {} +; fi
 	cd $(APP_DIST_DIR) && find . | sort | $(ZIP) -X@ $@
 
-$(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/Bitcoin-Qt: $(OSX_APP_BUILT) $(OSX_PACKAGING)
+$(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/Marscoin-Qt: $(OSX_APP_BUILT) $(OSX_PACKAGING)
 	OBJDUMP=$(OBJDUMP) $(PYTHON) $(OSX_DEPLOY_SCRIPT) $(OSX_APP) $(OSX_VOLNAME) -translations-dir=$(QT_TRANSLATION_DIR)
 
-deploydir: $(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/Bitcoin-Qt
+deploydir: $(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/Marscoin-Qt
 endif !BUILD_DARWIN
 
 deploy: $(OSX_ZIP)
@@ -194,16 +194,16 @@ fuzz_filtered.info: fuzz.info
 	$(abs_builddir)/contrib/filter-lcov.py $(LCOV_FILTER_PATTERN) $< $@
 	$(LCOV) -a $@ $(LCOV_OPTS) -o $@
 
-test_bitcoin.info: baseline_filtered.info
+test_marscoin.info: baseline_filtered.info
 	$(MAKE) -C src/ check
-	$(LCOV) -c $(LCOV_OPTS) -d $(abs_builddir)/src -t test_bitcoin -o $@
+	$(LCOV) -c $(LCOV_OPTS) -d $(abs_builddir)/src -t test_marscoin -o $@
 	$(LCOV) -z $(LCOV_OPTS) -d $(abs_builddir)/src
 
-test_bitcoin_filtered.info: test_bitcoin.info
+test_marscoin_filtered.info: test_marscoin.info
 	$(abs_builddir)/contrib/filter-lcov.py $(LCOV_FILTER_PATTERN) $< $@
 	$(LCOV) -a $@ $(LCOV_OPTS) -o $@
 
-functional_test.info: test_bitcoin_filtered.info
+functional_test.info: test_marscoin_filtered.info
 	@test/functional/test_runner.py $(EXTENDED_FUNCTIONAL_TESTS)
 	$(LCOV) -c $(LCOV_OPTS) -d $(abs_builddir)/src --t functional-tests -o $@
 	$(LCOV) -z $(LCOV_OPTS) -d $(abs_builddir)/src
@@ -215,17 +215,17 @@ functional_test_filtered.info: functional_test.info
 fuzz_coverage.info: fuzz_filtered.info
 	$(LCOV) $(LCOV_OPTS) -a baseline_filtered.info -a fuzz_filtered.info -o $@ | $(GREP) "\%" | $(AWK) '{ print substr($$3,2,50) "/" $$5 }' > coverage_percent.txt
 
-test_bitcoin_coverage.info: baseline_filtered.info test_bitcoin_filtered.info
-	$(LCOV) $(LCOV_OPTS) -a baseline_filtered.info -a test_bitcoin_filtered.info -o $@
+test_marscoin_coverage.info: baseline_filtered.info test_marscoin_filtered.info
+	$(LCOV) $(LCOV_OPTS) -a baseline_filtered.info -a test_marscoin_filtered.info -o $@
 
-total_coverage.info: test_bitcoin_filtered.info functional_test_filtered.info
-	$(LCOV) $(LCOV_OPTS) -a baseline_filtered.info -a test_bitcoin_filtered.info -a functional_test_filtered.info -o $@ | $(GREP) "\%" | $(AWK) '{ print substr($$3,2,50) "/" $$5 }' > coverage_percent.txt
+total_coverage.info: test_marscoin_filtered.info functional_test_filtered.info
+	$(LCOV) $(LCOV_OPTS) -a baseline_filtered.info -a test_marscoin_filtered.info -a functional_test_filtered.info -o $@ | $(GREP) "\%" | $(AWK) '{ print substr($$3,2,50) "/" $$5 }' > coverage_percent.txt
 
 fuzz.coverage/.dirstamp: fuzz_coverage.info
 	$(GENHTML) -s $(LCOV_OPTS) $< -o $(@D)
 	@touch $@
 
-test_bitcoin.coverage/.dirstamp:  test_bitcoin_coverage.info
+test_marscoin.coverage/.dirstamp:  test_marscoin_coverage.info
 	$(GENHTML) -s $(LCOV_OPTS) $< -o $(@D)
 	@touch $@
 
@@ -235,7 +235,7 @@ total.coverage/.dirstamp: total_coverage.info
 
 cov_fuzz: fuzz.coverage/.dirstamp
 
-cov: test_bitcoin.coverage/.dirstamp total.coverage/.dirstamp
+cov: test_marscoin.coverage/.dirstamp total.coverage/.dirstamp
 
 endif
 
@@ -328,7 +328,7 @@ clean-docs:
 	rm -rf doc/doxygen
 
 clean-local: clean-docs
-	rm -rf coverage_percent.txt test_bitcoin.coverage/ total.coverage/ fuzz.coverage/ test/tmp/ cache/ $(OSX_APP)
+	rm -rf coverage_percent.txt test_marscoin.coverage/ total.coverage/ fuzz.coverage/ test/tmp/ cache/ $(OSX_APP)
 	rm -rf test/functional/__pycache__ test/functional/test_framework/__pycache__ test/cache share/rpcauth/__pycache__
 	rm -rf dist/ test/lint/test_runner/target/ test/lint/__pycache__
 
