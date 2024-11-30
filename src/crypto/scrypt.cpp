@@ -28,6 +28,7 @@
  */
 
 #include <crypto/scrypt.h>
+#include <crypto/sha256.h>
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -57,11 +58,11 @@ static inline void be32enc(void *pp, uint32_t x)
 	p[1] = (x >> 16) & 0xff;
 	p[0] = (x >> 24) & 0xff;
 }
-
 #endif
+
 typedef struct HMAC_SHA256Context {
-	SHA256_CTX ictx;
-	SHA256_CTX octx;
+	CSHA256 ictx;
+	CSHA256 octx;
 } HMAC_SHA256_CTX;
 
 /* Initialize an HMAC-SHA256 operation with the given key. */
@@ -75,26 +76,26 @@ HMAC_SHA256_Init(HMAC_SHA256_CTX *ctx, const void *_K, size_t Klen)
 
 	/* If Klen > 64, the key is really SHA256(K). */
 	if (Klen > 64) {
-		SHA256_Init(&ctx->ictx);
-		SHA256_Update(&ctx->ictx, K, Klen);
-		SHA256_Final(khash, &ctx->ictx);
+		ctx->ictx.Reset();
+		ctx->ictx.Write(K, Klen);
+		ctx->ictx.Finalize(khash);
 		K = khash;
 		Klen = 32;
 	}
 
 	/* Inner SHA256 operation is SHA256(K xor [block of 0x36] || data). */
-	SHA256_Init(&ctx->ictx);
+	ctx->ictx.Reset();
 	memset(pad, 0x36, 64);
 	for (i = 0; i < Klen; i++)
 		pad[i] ^= K[i];
-	SHA256_Update(&ctx->ictx, pad, 64);
+	ctx->ictx.Write(pad, 64);
 
 	/* Outer SHA256 operation is SHA256(K xor [block of 0x5c] || hash). */
-	SHA256_Init(&ctx->octx);
+	ctx->octx.Reset();
 	memset(pad, 0x5c, 64);
 	for (i = 0; i < Klen; i++)
 		pad[i] ^= K[i];
-	SHA256_Update(&ctx->octx, pad, 64);
+	ctx->octx.Write(pad, 64);
 
 	/* Clean the stack. */
 	memset(khash, 0, 32);
@@ -105,7 +106,7 @@ static void
 HMAC_SHA256_Update(HMAC_SHA256_CTX *ctx, const void *in, size_t len)
 {
 	/* Feed data to the inner SHA256 operation. */
-	SHA256_Update(&ctx->ictx, in, len);
+	ctx->ictx.Write((const unsigned char*)in, len);
 }
 
 /* Finish an HMAC-SHA256 operation. */
@@ -115,13 +116,13 @@ HMAC_SHA256_Final(unsigned char digest[32], HMAC_SHA256_CTX *ctx)
 	unsigned char ihash[32];
 
 	/* Finish the inner SHA256 operation. */
-	SHA256_Final(ihash, &ctx->ictx);
+	ctx->ictx.Finalize(ihash);
 
 	/* Feed the inner hash to the outer SHA256 operation. */
-	SHA256_Update(&ctx->octx, ihash, 32);
+	ctx->octx.Write(ihash, 32);
 
 	/* Finish the outer SHA256 operation. */
-	SHA256_Final(digest, &ctx->octx);
+	ctx->octx.Finalize(digest);
 
 	/* Clean the stack. */
 	memset(ihash, 0, 32);
