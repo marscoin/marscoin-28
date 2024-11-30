@@ -585,6 +585,8 @@ crypto_libmarscoin_crypto_base_la_SOURCES = \
   crypto/muhash.cpp \
   crypto/ripemd160.cpp \
   crypto/ripemd160.h \
+  crypto/scrypt.cpp \
+  crypto/scrypt.h \
   crypto/sha1.cpp \
   crypto/sha1.h \
   crypto/sha256.cpp \

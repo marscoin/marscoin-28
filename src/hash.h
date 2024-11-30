@@ -9,6 +9,7 @@
 #include <attributes.h>
 #include <crypto/common.h>
 #include <crypto/ripemd160.h>
+#include <crypto/scrypt.h>
 #include <crypto/sha256.h>
 #include <prevector.h>
 #include <serialize.h>
@@ -94,6 +95,15 @@ inline uint160 Hash160(const T1& in1)
     uint160 result;
     CHash160().Write(MakeUCharSpan(in1)).Finalize(result);
     return result;
+}
+
+/** Compute the 256-bit scrypt hash of an object. */
+template<typename T>
+uint256 scrypt_1024_1_1_256(const T& obj)
+{
+    uint256 out;
+    scrypt_1024_1_1_256(reinterpret_cast<const char*>(&obj), reinterpret_cast<char*>(&out));
+    return out;
 }
 
 /** A writer stream (for serialization) that computes a 256-bit hash. */
