@@ -459,7 +459,15 @@ bool PermittedDifficultyTransition(const Consensus::Params& params, int64_t heig
     return true;
 }
 
+// Bypasses the actual proof of work check during fuzz testing with a simplified validation checking whether
+// the most significant bit of the last byte of the hash is set.
 bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params& params)
+{
+    //if constexpr (G_FUZZING) return (hash.data()[31] & 0x80) == 0;
+    return CheckProofOfWorkImpl(hash, nBits, params);
+}
+
+bool CheckProofOfWorkImpl(uint256 hash, unsigned int nBits, const Consensus::Params& params)
 {
     bool fNegative;
     bool fOverflow;

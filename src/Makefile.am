@@ -116,6 +116,7 @@ endif
 # bitcoin core #
 BITCOIN_CORE_H = \
   addresstype.h \
+  auxpow.h \
   addrdb.h \
   addrman.h \
   addrman_impl.h \
@@ -258,11 +259,13 @@ BITCOIN_CORE_H = \
   random.h \
   randomenv.h \
   rest.h \
+  rpc/auxpow_miner.h \
   rpc/blockchain.h \
   rpc/client.h \
   rpc/mempool.h \
   rpc/mining.h \
   rpc/protocol.h \
+  rpc/rawtransaction.h \
   rpc/rawtransaction_util.h \
   rpc/register.h \
   rpc/request.h \
@@ -454,6 +457,8 @@ libmarscoin_node_a_SOURCES = \
   policy/truc_policy.cpp \
   pow.cpp \
   rest.cpp \
+  rpc/auxpow.cpp \
+  rpc/auxpow_miner.cpp \
   rpc/blockchain.cpp \
   rpc/fees.cpp \
   rpc/mempool.cpp \
@@ -655,6 +660,8 @@ libmarscoin_consensus_a_SOURCES = \
   prevector.h \
   primitives/block.cpp \
   primitives/block.h \
+  primitives/pureheader.cpp \
+  primitives/pureheader.h \
   primitives/transaction.cpp \
   primitives/transaction.h \
   pubkey.cpp \
@@ -677,6 +684,7 @@ libmarscoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BOOST_CPPFL
 libmarscoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libmarscoin_common_a_SOURCES = \
   addresstype.cpp \
+  auxpow.cpp \
   base58.cpp \
   bech32.cpp \
   chainparamsbase.cpp \
@@ -965,6 +973,7 @@ libmarscoinkernel_la_SOURCES = \
   policy/truc_policy.cpp \
   pow.cpp \
   primitives/block.cpp \
+  primitives/pureheader.cpp \
   primitives/transaction.cpp \
   pubkey.cpp \
   random.cpp \

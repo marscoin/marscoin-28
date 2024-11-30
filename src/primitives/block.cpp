@@ -8,14 +8,17 @@
 #include <hash.h>
 #include <tinyformat.h>
 
-uint256 CBlockHeader::GetHash() const
+void CBlockHeader::SetAuxpow (std::unique_ptr<CAuxPow> apow)
 {
-    return (HashWriter{} << *this).GetHash();
-}
-
-uint256 CBlockHeader::GetPoWHash() const
-{
-    return scrypt_1024_1_1_256(*this);
+    if (apow != nullptr)
+    {
+        auxpow.reset(apow.release());
+        SetAuxpowVersion(true);
+    } else
+    {
+        auxpow.reset();
+        SetAuxpowVersion(false);
+    }
 }
 
 std::string CBlock::ToString() const

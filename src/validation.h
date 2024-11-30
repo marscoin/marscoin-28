@@ -409,6 +409,14 @@ bool IsBlockMutated(const CBlock& block, bool check_witness_root);
 /** Return the sum of the claimed work on a given set of headers. No verification of PoW is done. */
 arith_uint256 CalculateClaimedHeadersWork(const std::vector<CBlockHeader>& headers);
 
+/**
+ * Check proof-of-work of a block header, taking auxpow into account.
+ * @param block The block header.
+ * @param params Consensus parameters.
+ * @return True iff the PoW is correct.
+ */
+bool CheckProofOfWork(const CBlockHeader& block, const Consensus::Params& params);
+
 enum class VerifyDBResult {
     SUCCESS,
     CORRUPTED_BLOCK_DB,

@@ -32,6 +32,7 @@
 #include <node/utxo_snapshot.h>
 #include <node/warnings.h>
 #include <primitives/transaction.h>
+#include <rpc/rawtransaction.h>
 #include <rpc/server.h>
 #include <rpc/server_util.h>
 #include <rpc/util.h>
@@ -77,11 +78,14 @@ static CUpdatedBlock latestblock GUARDED_BY(cs_blockchange);
 
 /* Calculate the difficulty for a given block index.
  */
-double GetDifficulty(const CBlockIndex& blockindex)
+double GetDifficultyForBits(const uint32_t nBits)
 {
-    int nShift = (blockindex.nBits >> 24) & 0xff;
-    double dDiff =
-        (double)0x0000ffff / (double)(blockindex.nBits & 0x00ffffff);
+    const uint32_t mantissa = nBits & 0x00ffffff;
+    if (mantissa == 0)
+        return 0.0;
+
+    int nShift = (nBits >> 24) & 0xff;
+    double dDiff = (double)0x0000ffff / (double)mantissa;
 
     while (nShift < 29)
     {
@@ -135,30 +139,53 @@ static const CBlockIndex* ParseHashOrHeight(const UniValue& param, ChainstateMan
     }
 }
 
-UniValue blockheaderToJSON(const CBlockIndex& tip, const CBlockIndex& blockindex)
+/** The RPC result type for "auxpow" subobjects.  */
+const RPCResult AUXPOW_RESULT{RPCResult::Type::OBJ, "auxpow", /*optional=*/true, "The auxpow object attached to this block",
+    {
+        {RPCResult::Type::OBJ, "tx", "The parent chain coinbase tx of this auxpow",
+            {{RPCResult::Type::ELISION, "", "Same format as for decoded raw transactions"}}},
+        {RPCResult::Type::ARR, "merklebranch", "Merkle branch of the parent coinbase",
+            {{RPCResult::Type::STR_HEX, "", "The Merkle branch hash"}}},
+        {RPCResult::Type::NUM, "chainindex", "Index in the auxpow Merkle tree"},
+        {RPCResult::Type::ARR, "chainmerklebranch", "Branch in the auxpow Merkle tree",
+            {{RPCResult::Type::STR_HEX, "", "The Merkle branch hash"}}},
+        {RPCResult::Type::ELISION, "parentblock", "The parent block serialised as hex string or JSON object"},
+    }};
+
+/** Converts the base data, excluding any contextual information,
+ * in a block header to JSON.  */
+static UniValue blockheaderToJSON(const CPureBlockHeader& header)
+{
+    UniValue result(UniValue::VOBJ);
+    result.pushKV("hash", header.GetHash().GetHex());
+    result.pushKV("version", header.nVersion);
+    result.pushKV("versionHex", strprintf("%08x", header.nVersion));
+    result.pushKV("merkleroot", header.hashMerkleRoot.GetHex());
+    result.pushKV("time", (int64_t)header.nTime);
+    result.pushKV("nonce", (uint64_t)header.nNonce);
+    result.pushKV("bits", strprintf("%08x", header.nBits));
+    result.pushKV("difficulty", GetDifficultyForBits(header.nBits));
+
+    if (!header.hashPrevBlock.IsNull())
+        result.pushKV("previousblockhash", header.hashPrevBlock.GetHex());
+
+    return result;
+}
+
+UniValue blockheaderToJSON(const BlockManager& blockman, const CBlockIndex& tip, const CBlockIndex& blockindex)
 {
     // Serialize passed information without accessing chain state of the active chain!
     AssertLockNotHeld(cs_main); // For performance reasons
 
-    UniValue result(UniValue::VOBJ);
-    result.pushKV("hash", blockindex.GetBlockHash().GetHex());
+    auto result = blockheaderToJSON(blockindex.GetBlockHeader(blockman));
     const CBlockIndex* pnext;
     int confirmations = ComputeNextBlockAndDepth(tip, blockindex, pnext);
     result.pushKV("confirmations", confirmations);
     result.pushKV("height", blockindex.nHeight);
-    result.pushKV("version", blockindex.nVersion);
-    result.pushKV("versionHex", strprintf("%08x", blockindex.nVersion));
-    result.pushKV("merkleroot", blockindex.hashMerkleRoot.GetHex());
-    result.pushKV("time", blockindex.nTime);
-    result.pushKV("mediantime", blockindex.GetMedianTimePast());
-    result.pushKV("nonce", blockindex.nNonce);
-    result.pushKV("bits", strprintf("%08x", blockindex.nBits));
-    result.pushKV("difficulty", GetDifficulty(blockindex));
+    result.pushKV("mediantime", (int64_t)blockindex.GetMedianTimePast());
     result.pushKV("chainwork", blockindex.nChainWork.GetHex());
-    result.pushKV("nTx", blockindex.nTx);
+    result.pushKV("nTx", (uint64_t)blockindex.nTx);
 
-    if (blockindex.pprev)
-        result.pushKV("previousblockhash", blockindex.pprev->GetBlockHash().GetHex());
     if (pnext)
         result.pushKV("nextblockhash", pnext->GetBlockHash().GetHex());
     return result;
@@ -166,7 +193,7 @@ UniValue blockheaderToJSON(const CBlockIndex& tip, const CBlockIndex& blockindex
 
 UniValue blockToJSON(BlockManager& blockman, const CBlock& block, const CBlockIndex& tip, const CBlockIndex& blockindex, TxVerbosity verbosity)
 {
-    UniValue result = blockheaderToJSON(tip, blockindex);
+    UniValue result = blockheaderToJSON(blockman, tip, blockindex);
 
     result.pushKV("strippedsize", (int)::GetSerializeSize(TX_NO_WITNESS(block)));
     result.pushKV("size", (int)::GetSerializeSize(TX_WITH_WITNESS(block)));
@@ -202,6 +229,45 @@ UniValue blockToJSON(BlockManager& blockman, const CBlock& block, const CBlockIn
     return result;
 }
 
+UniValue AuxpowToJSON(const CAuxPow& auxpow, const bool verbose, Chainstate& active_chainstate)
+{
+    UniValue result(UniValue::VOBJ);
+
+    {
+        UniValue tx(UniValue::VOBJ);
+        tx.pushKV("hex", EncodeHexTx(*auxpow.coinbaseTx));
+        TxToJSON(*auxpow.coinbaseTx, auxpow.parentBlock.GetHash(), tx, active_chainstate);
+        result.pushKV("tx", tx);
+    }
+
+    result.pushKV("chainindex", auxpow.nChainIndex);
+
+    {
+        UniValue branch(UniValue::VARR);
+        for (const auto& node : auxpow.vMerkleBranch)
+            branch.push_back(node.GetHex());
+        result.pushKV("merklebranch", branch);
+    }
+
+    {
+        UniValue branch(UniValue::VARR);
+        for (const auto& node : auxpow.vChainMerkleBranch)
+            branch.push_back(node.GetHex());
+        result.pushKV("chainmerklebranch", branch);
+    }
+
+    if (verbose)
+        result.pushKV("parentblock", blockheaderToJSON(auxpow.parentBlock));
+    else
+    {
+        DataStream ssParent;
+        ssParent << TX_WITH_WITNESS(auxpow.parentBlock);
+        const std::string strHex = HexStr(ssParent);
+        result.pushKV("parentblock", strHex);
+    }
+
+    return result;
+}
 static RPCHelpMan getblockcount()
 {
     return RPCHelpMan{"getblockcount",
@@ -421,7 +487,7 @@ static RPCHelpMan getdifficulty()
 {
     ChainstateManager& chainman = EnsureAnyChainman(request.context);
     LOCK(cs_main);
-    return GetDifficulty(*CHECK_NONFATAL(chainman.ActiveChain().Tip()));
+    return GetDifficultyForBits(CHECK_NONFATAL(chainman.ActiveChain().Tip())->nBits);
 },
     };
 }
@@ -538,6 +604,7 @@ static RPCHelpMan getblockheader()
                             {RPCResult::Type::NUM, "nTx", "The number of transactions in the block"},
                             {RPCResult::Type::STR_HEX, "previousblockhash", /*optional=*/true, "The hash of the previous block (if available)"},
                             {RPCResult::Type::STR_HEX, "nextblockhash", /*optional=*/true, "The hash of the next block (if available)"},
+                            AUXPOW_RESULT,
                         }},
                     RPCResult{"for verbose=false",
                         RPCResult::Type::STR_HEX, "", "A string that is serialized, hex-encoded data for block 'hash'"},
@@ -554,10 +621,10 @@ static RPCHelpMan getblockheader()
     if (!request.params[1].isNull())
         fVerbose = request.params[1].get_bool();
 
+    ChainstateManager& chainman = EnsureAnyChainman(request.context);
     const CBlockIndex* pblockindex;
     const CBlockIndex* tip;
     {
-        ChainstateManager& chainman = EnsureAnyChainman(request.context);
         LOCK(cs_main);
         pblockindex = chainman.m_blockman.LookupBlockIndex(hash);
         tip = chainman.ActiveChain().Tip();
@@ -567,15 +634,21 @@ static RPCHelpMan getblockheader()
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Block not found");
     }
 
+    const auto header = pblockindex->GetBlockHeader(chainman.m_blockman);
+
     if (!fVerbose)
     {
         DataStream ssBlock{};
-        ssBlock << pblockindex->GetBlockHeader();
+        ssBlock << header;
         std::string strHex = HexStr(ssBlock);
         return strHex;
     }
 
-    return blockheaderToJSON(*tip, *pblockindex);
+    auto result = blockheaderToJSON(chainman.m_blockman, *tip, *pblockindex);
+    if (header.auxpow)
+        result.pushKV("auxpow", AuxpowToJSON(*header.auxpow, fVerbose, chainman.ActiveChainstate()));
+
+    return result;
 },
     };
 }
@@ -1315,7 +1388,7 @@ RPCHelpMan getblockchaininfo()
     obj.pushKV("blocks", height);
     obj.pushKV("headers", chainman.m_best_header ? chainman.m_best_header->nHeight : -1);
     obj.pushKV("bestblockhash", tip.GetBlockHash().GetHex());
-    obj.pushKV("difficulty", GetDifficulty(tip));
+    obj.pushKV("difficulty", GetDifficultyForBits(tip.nBits));
     obj.pushKV("time", tip.GetBlockTime());
     obj.pushKV("mediantime", tip.GetMedianTimePast());
     obj.pushKV("verificationprogress", GuessVerificationProgress(chainman.GetParams().TxData(), &tip));
@@ -2930,7 +3003,7 @@ return RPCHelpMan{
 
         data.pushKV("blocks",                (int)chain.Height());
         data.pushKV("bestblockhash",         tip->GetBlockHash().GetHex());
-        data.pushKV("difficulty", GetDifficulty(*tip));
+        data.pushKV("difficulty",            GetDifficultyForBits(tip->nBits));
         data.pushKV("verificationprogress",  GuessVerificationProgress(Params().TxData(), tip));
         data.pushKV("coins_db_cache_bytes",  cs.m_coinsdb_cache_size_bytes);
         data.pushKV("coins_tip_cache_bytes", cs.m_coinstip_cache_size_bytes);
