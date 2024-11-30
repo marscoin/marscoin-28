@@ -25,7 +25,7 @@ check_PROGRAMS =
 TESTS =
 BENCHMARKS =
 
-BITCOIN_INCLUDES=-I$(builddir) -I$(srcdir)/$(MINISKETCH_INCLUDE_DIR_INT) -I$(srcdir)/secp256k1/include -I$(srcdir)/$(UNIVALUE_INCLUDE_DIR_INT)
+BITCOIN_INCLUDES=-I$(builddir) -I$(srcdir)/$(MINISKETCH_INCLUDE_DIR_INT) -I$(srcdir)/secp256k1/include -I$(srcdir)/$(UNIVALUE_INCLUDE_DIR_INT) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
 
 LIBBITCOIN_NODE=libmarscoin_node.a
 LIBBITCOIN_COMMON=libmarscoin_common.a
@@ -122,6 +122,7 @@ BITCOIN_CORE_H = \
   attributes.h \
   banman.h \
   base58.h \
+  bignum.h \
   bech32.h \
   bip324.h \
   blockencodings.h \
@@ -382,7 +383,7 @@ obj/build.h: FORCE
 libmarscoin_util_a-clientversion.$(OBJEXT): obj/build.h
 
 # node #
-libmarscoin_node_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(LEVELDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(MINIUPNPC_CPPFLAGS) $(NATPMP_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
+libmarscoin_node_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(LEVELDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(MINIUPNPC_CPPFLAGS) $(NATPMP_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
 libmarscoin_node_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libmarscoin_node_a_SOURCES = \
   addrdb.cpp \
@@ -798,7 +799,7 @@ marscoin_bin_ldadd = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-marscoin_bin_ldadd += $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS)
+marscoin_bin_ldadd += $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS)
 
 marscoind_SOURCES = $(marscoin_daemon_sources) init/bitcoind.cpp
 marscoind_CPPFLAGS = $(marscoin_bin_cppflags)
@@ -848,6 +849,7 @@ marscoin_tx_LDADD = \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CONSENSUS) \
   $(LIBBITCOIN_CRYPTO) \
+  $(CRYPTO_LIBS) \
   $(LIBSECP256K1)
 #
 
@@ -867,6 +869,7 @@ marscoin_wallet_LDADD = \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBSECP256K1) \
   $(BDB_LIBS) \
+  $(CRYPTO_LIBS) \
   $(SQLITE_LIBS)
 
 if TARGET_WINDOWS
@@ -890,6 +893,7 @@ marscoin_util_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_CONSENSUS) \
   $(LIBBITCOIN_CRYPTO) \
+  $(CRYPTO_LIBS) \
   $(LIBSECP256K1)
 #
 

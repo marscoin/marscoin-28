@@ -55,6 +55,7 @@
 #include <util/moneystr.h>
 #include <util/rbf.h>
 #include <util/result.h>
+#include <util/serfloat.h>
 #include <util/signalinterrupt.h>
 #include <util/strencodings.h>
 #include <util/string.h>
@@ -4161,11 +4162,20 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     AssertLockHeld(::cs_main);
     assert(pindexPrev != nullptr);
     const int nHeight = pindexPrev->nHeight + 1;
+    const Consensus::Params& consensusParams = Params().GetConsensus();
 
-    // Check proof of work
-    const Consensus::Params& consensusParams = chainman.GetConsensus();
-    if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
-        return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
+    // Check proof of work (handle incorrect units for DGW)
+    if (nHeight <= 126000) {
+        unsigned int nBitsNext = GetNextWorkRequired(pindexPrev, &block, consensusParams);
+        double n1 = ConvertBitsToDouble(block.nBits);
+        double n2 = ConvertBitsToDouble(nBitsNext);
+        if (abs(n1-n2) > n1*0.5) {
+            return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
+        }
+    } else {
+        if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
+            return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
+    }
 
     // Check against checkpoints
     if (chainman.m_options.checkpoints_enabled) {

@@ -1,4 +1,4 @@
-packages:=
+packages:= openssl
 
 boost_packages = boost
 

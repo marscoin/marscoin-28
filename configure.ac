@@ -617,6 +617,7 @@ AC_ARG_WITH([daemon],
   [build_marscoind=$withval],
   [build_marscoind=yes])
 
+pkg_openssl=no
 case $host in
   *mingw*)
      TARGET_OS=windows
@@ -694,6 +695,13 @@ case $host in
          dnl of search paths in case it's not already there.
          if test "$suppress_external_warnings" != "no"; then
            AX_CHECK_PREPROC_FLAG([-Xclang -internal-isystem -Xclang /usr/local/include/], [CORE_CPPFLAGS="$CORE_CPPFLAGS -Xclang -internal-isystem -Xclang /usr/local/include/"], [], [$CXXFLAG_WERROR])
+         fi
+
+         openssl_prefix=`$BREW --prefix openssl 2>/dev/null`
+         if test x$openssl_prefix != x; then
+           PKG_CONFIG_PATH="$openssl_prefix/lib/pkgconfig:$PKG_CONFIG_PATH"
+           export PKG_CONFIG_PATH
+           CRYPTO_CPPFLAGS="-I$openssl_prefix/include"
          fi
 
          if test "$use_bdb" != "no" && $BREW list --versions berkeley-db@4 >/dev/null && test "$BDB_CFLAGS" = "" && test "$BDB_LIBS" = ""; then
@@ -1297,6 +1305,17 @@ if test "$use_tests" = "yes"; then
   if test "$HEXDUMP" = ""; then
     AC_MSG_ERROR([hexdump is required for tests])
   fi
+fi
+dnl openssl check
+
+if test "x$pkg_openssl" = xyes; then
+PKG_CHECK_MODULES([SSL], [libssl],, [AC_MSG_ERROR(openssl not found.)])
+PKG_CHECK_MODULES([CRYPTO], [libcrypto],,[AC_MSG_ERROR(libcrypto not found.)])
+else
+  AC_CHECK_HEADER([openssl/crypto.h],,AC_MSG_ERROR(libcrypto headers missing))
+  AC_CHECK_LIB([crypto],      [main],CRYPTO_LIBS=-lcrypto, AC_MSG_ERROR(libcrypto missing))
+  AC_CHECK_HEADER([openssl/ssl.h],, AC_MSG_ERROR(libssl headers missing),)
+  AC_CHECK_LIB([ssl],         [main],SSL_LIBS=-lssl, AC_MSG_ERROR(libssl missing))
 fi
 
 dnl libevent check
