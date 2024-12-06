@@ -394,7 +394,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     int nHeight = pindexLast->nHeight+1;
     if (nHeight >= 120000 && nHeight < 125999) {
         return DarkGravityWave2(pindexLast, pblock, params);
-    } else if (nHeight >= 126000 && nHeight < 2999998) {
+    } else if (nHeight >= 126000 && nHeight < 2999999) {
         return DarkGravityWave3(pindexLast, pblock, params);
     } else if (nHeight >= 2999999) {
         return GravityAsert(pindexLast, pblock, params);
