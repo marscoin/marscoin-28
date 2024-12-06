@@ -1967,7 +1967,7 @@ bool CheckProofOfWork(const CBlockHeader& block, const Consensus::Params& params
         return false;
     }
 
-    if (!CheckProofOfWork(block.auxpow->getParentBlockHash(), block.nBits, params)) {
+    if (!CheckProofOfWork(block.auxpow->getParentBlockPoWHash(), block.nBits, params)) {
         LogError ("%s : AUX proof of work failed", __func__);
         return false;
     }
