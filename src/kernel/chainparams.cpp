@@ -128,10 +128,10 @@ public:
         consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
         consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
 
-        consensus.nAuxpowChainId = 0x0001;
-        consensus.nAuxpowStartHeight = 19200;
+        consensus.nAuxpowChainId = 0x029c;
+        consensus.nAuxpowStartHeight = 3100000;
+        consensus.nLegacyBlocksBefore = -1;
         consensus.fStrictChainId = true;
-        consensus.nLegacyBlocksBefore = 19200;
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -269,10 +269,10 @@ public:
         consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
         consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
 
-        consensus.nAuxpowStartHeight = 0;
-        consensus.nAuxpowChainId = 0x0001;
-        consensus.fStrictChainId = false;
+        consensus.nAuxpowChainId = 0x029d;
+        consensus.nAuxpowStartHeight = 50;
         consensus.nLegacyBlocksBefore = -1;
+        consensus.fStrictChainId = true;
 
         pchMessageStart[0] = 0xfa;
         pchMessageStart[1] = 0xaf;
