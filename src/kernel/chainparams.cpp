@@ -5,6 +5,7 @@
 
 #include <kernel/chainparams.h>
 
+#include <arith_uint256.h>
 #include <chainparamsseeds.h>
 #include <consensus/amount.h>
 #include <consensus/merkle.h>
@@ -35,6 +36,14 @@ auto consteval_ctor(auto&& input) { return input; }
 #else
 #define consteval_ctor(input) (input)
 #endif
+
+static void SearchForNewGenesis(CBlock& block, uint256& powLimit)
+{
+    while (UintToArith256(block.GetPoWHash()) > UintToArith256(powLimit)) {
+        ++block.nNonce;
+        printf("\r%08x", block.nNonce);
+    }
+}
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
@@ -119,10 +128,10 @@ public:
         consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
         consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
 
-        consensus.nAuxpowChainId = 0x0001;
-        consensus.nAuxpowStartHeight = 19200;
+        consensus.nAuxpowChainId = 0x029c;
+        consensus.nAuxpowStartHeight = 3100000;
+        consensus.nLegacyBlocksBefore = -1;
         consensus.fStrictChainId = true;
-        consensus.nLegacyBlocksBefore = 19200;
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -260,23 +269,24 @@ public:
         consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
         consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
 
-        consensus.nAuxpowStartHeight = 0;
-        consensus.nAuxpowChainId = 0x0001;
-        consensus.fStrictChainId = false;
+        consensus.nAuxpowChainId = 0x029d;
+        consensus.nAuxpowStartHeight = 50;
         consensus.nLegacyBlocksBefore = -1;
+        consensus.fStrictChainId = true;
 
-        pchMessageStart[0] = 0xfc;
-        pchMessageStart[1] = 0xc1;
-        pchMessageStart[2] = 0xb7;
-        pchMessageStart[3] = 0xdc;
+        pchMessageStart[0] = 0xfa;
+        pchMessageStart[1] = 0xaf;
+        pchMessageStart[2] = 0xde;
+        pchMessageStart[3] = 0xed;
         nDefaultPort = 18337;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 0;  // tbd
         m_assumed_chain_state_size = 0; // tbd
 
-        genesis = CreateGenesisBlock(1388590627, 638933, 0x1e0ffff0, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1732912000, 958757, 0x1e0ffff0, 1, 50 * COIN);
+//      SearchForNewGenesis(genesis, consensus.powLimit);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256{"06e005f86644f15d2e4c62b59a038c798a3b0816ba58dcc8c91e02ce5a685299"});
+        assert(consensus.hashGenesisBlock == uint256{"395427a340a27e01cf481c7001f6c1d1fdb3b3a1a0dfdb27ff14066444627e42"});
         assert(genesis.hashMerkleRoot == uint256{"b9594f964ad5d42bd99edbfaaeeec900cd0f7563a14d90982cf6675df98d7863"});
 
         vFixedSeeds.clear();
