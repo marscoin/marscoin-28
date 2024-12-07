@@ -117,6 +117,17 @@ public:
               const Consensus::Params& params) const;
 
   /**
+   * Get the parent block's hash.  This is used to verify that it
+   * satisfies the PoW requirement.
+   * @return The parent block hash.
+   */
+  inline uint256
+  getParentBlockPoWHash() const
+  {
+    return parentBlock.GetPoWHash ();
+  }
+
+  /**
    * Returns the parent block hash.  This is used to validate the PoW.
    */
   inline uint256
