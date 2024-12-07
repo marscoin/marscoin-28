@@ -47,24 +47,24 @@
     </message>
     <message>
         <source>Choose the address to send coins to</source>
-        <translation type="unfinished">Scegli l'indirizzo al quale inviare bitcoin</translation>
+        <translation type="unfinished">Scegli l'indirizzo al quale inviare marscoin</translation>
     </message>
     <message>
         <source>Choose the address to receive coins with</source>
-        <translation type="unfinished">Scegli l'indirizzo al quale ricevere bitcoin.</translation>
+        <translation type="unfinished">Scegli l'indirizzo al quale ricevere marscoin.</translation>
     </message>
     <message>
         <source>C&amp;hoose</source>
         <translation type="unfinished">Scegli</translation>
     </message>
     <message>
-        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation type="unfinished">Questi sono i tuoi indirizzi Bitcoin per l'invio di pagamenti. Controlla sempre l'importo e l'indirizzo del beneficiario prima di inviare bitcoin.</translation>
+        <source>These are your Marscoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation type="unfinished">Questi sono i tuoi indirizzi Marscoin per l'invio di pagamenti. Controlla sempre l'importo e l'indirizzo del beneficiario prima di inviare marscoin.</translation>
     </message>
     <message>
-        <source>These are your Bitcoin addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
+        <source>These are your Marscoin addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
 Signing is only possible with addresses of the type 'legacy'.</source>
-        <translation type="unfinished">Questi sono i tuoi indirizzi Bitcoin per ricevere pagamenti. Usa il tasto "Crea nuovo indirizzo ricevente" nella schermata "Ricevi" per creare nuovi indirizzi.
+        <translation type="unfinished">Questi sono i tuoi indirizzi Marscoin per ricevere pagamenti. Usa il tasto "Crea nuovo indirizzo ricevente" nella schermata "Ricevi" per creare nuovi indirizzi.
 E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
     </message>
     <message>
@@ -192,8 +192,8 @@ E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
         <translation type="unfinished">Indietro</translation>
     </message>
     <message>
-        <source>Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
-        <translation type="unfinished">Ricorda che la cifratura del portafoglio non protegge del tutto i tuoi bitcoin dal furto da parte di malware che infettasse il tuo computer.</translation>
+        <source>Remember that encrypting your wallet cannot fully protect your marscoins from being stolen by malware infecting your computer.</source>
+        <translation type="unfinished">Ricorda che la cifratura del portafoglio non protegge del tutto i tuoi marscoin dal furto da parte di malware che infettasse il tuo computer.</translation>
     </message>
     <message>
         <source>Wallet to be encrypted</source>
@@ -319,8 +319,8 @@ E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
         <translation type="unfinished">Importo</translation>
     </message>
     <message>
-        <source>Enter a Bitcoin address (e.g. %1)</source>
-        <translation type="unfinished">Inserisci un indirizzo Bitcoin (ad es. %1)</translation>
+        <source>Enter a Marscoin address (e.g. %1)</source>
+        <translation type="unfinished">Inserisci un indirizzo Marscoin (ad es. %1)</translation>
     </message>
     <message>
         <source>Unroutable</source>
@@ -483,8 +483,8 @@ E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
         <translation type="unfinished">Il Proxy è &lt;b&gt;abilitato&lt;/b&gt;:%1</translation>
     </message>
     <message>
-        <source>Send coins to a Bitcoin address</source>
-        <translation type="unfinished">Invia fondi ad un indirizzo Bitcoin</translation>
+        <source>Send coins to a Marscoin address</source>
+        <translation type="unfinished">Invia fondi ad un indirizzo Marscoin</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -527,16 +527,16 @@ E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
         <translation type="unfinished">Firma &amp;messaggio</translation>
     </message>
     <message>
-        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
-        <translation type="unfinished">Firma messaggi con i tuoi indirizzi Bitcoin per dimostrarne il possesso</translation>
+        <source>Sign messages with your Marscoin addresses to prove you own them</source>
+        <translation type="unfinished">Firma messaggi con i tuoi indirizzi Marscoin per dimostrarne il possesso</translation>
     </message>
     <message>
         <source>&amp;Verify message…</source>
         <translation type="unfinished">&amp;Verifica messaggio</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
-        <translation type="unfinished">Verifica che i messaggi siano stati firmati con gli indirizzi Bitcoin specificati</translation>
+        <source>Verify messages to ensure they were signed with specified Marscoin addresses</source>
+        <translation type="unfinished">Verifica che i messaggi siano stati firmati con gli indirizzi Marscoin specificati</translation>
     </message>
     <message>
         <source>&amp;Load PSBT from file…</source>
@@ -591,8 +591,8 @@ E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
         <translation type="unfinished">Connessione ai nodi...</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
-        <translation type="unfinished">Richiedi pagamenti (genera codici QR e bitcoin: URI)</translation>
+        <source>Request payments (generates QR codes and marscoin: URIs)</source>
+        <translation type="unfinished">Richiedi pagamenti (genera codici QR e marscoin: URI)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -646,16 +646,16 @@ E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
         <translation type="unfinished">Aggiornato</translation>
     </message>
     <message>
-        <source>Load Partially Signed Bitcoin Transaction</source>
-        <translation type="unfinished">Carica Transazione Bitcoin Parzialmente Firmata (PSBT)</translation>
+        <source>Load Partially Signed Marscoin Transaction</source>
+        <translation type="unfinished">Carica Transazione Marscoin Parzialmente Firmata (PSBT)</translation>
     </message>
     <message>
         <source>Load PSBT from &amp;clipboard…</source>
         <translation type="unfinished">Carica PSBT dagli &amp;appunti...</translation>
     </message>
     <message>
-        <source>Load Partially Signed Bitcoin Transaction from clipboard</source>
-        <translation type="unfinished">Carica Transazione Bitcoin Parzialmente Firmata (PSBT) dagli appunti</translation>
+        <source>Load Partially Signed Marscoin Transaction from clipboard</source>
+        <translation type="unfinished">Carica Transazione Marscoin Parzialmente Firmata (PSBT) dagli appunti</translation>
     </message>
     <message>
         <source>Node window</source>
@@ -674,8 +674,8 @@ E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
         <translation type="unfinished">Indirizzi di &amp;destinazione</translation>
     </message>
     <message>
-        <source>Open a bitcoin: URI</source>
-        <translation type="unfinished">Apri un bitcoin: URI</translation>
+        <source>Open a marscoin: URI</source>
+        <translation type="unfinished">Apri un marscoin: URI</translation>
     </message>
     <message>
         <source>Open Wallet</source>
@@ -712,8 +712,8 @@ E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
         <translation type="unfinished">Migra un portafoglio</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
-        <translation type="unfinished">Mostra il messaggio di aiuto di %1 per ottenere una lista di opzioni di comando per Bitcoin</translation>
+        <source>Show the %1 help message to get a list with possible Marscoin command-line options</source>
+        <translation type="unfinished">Mostra il messaggio di aiuto di %1 per ottenere una lista di opzioni di comando per Marscoin</translation>
     </message>
     <message>
         <source>&amp;Mask values</source>
@@ -764,11 +764,11 @@ E' possibile firmare solo con indirizzi di tipo "legacy".</translation>
         <translation type="unfinished">S&amp;come</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Bitcoin network.</source>
+        <source>%n active connection(s) to Marscoin network.</source>
         <extracomment>A substring of the tooltip.</extracomment>
         <translation type="unfinished">
-            <numerusform>%nconnessione attiva alla rete Bitcoin</numerusform>
-            <numerusform>%nconnessioni attive alla rete Bitcoin</numerusform>
+            <numerusform>%nconnessione attiva alla rete Marscoin</numerusform>
+            <numerusform>%nconnessioni attive alla rete Marscoin</numerusform>
         </translation>
     </message>
     <message>
@@ -1290,8 +1290,8 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
         <translation type="unfinished">Modifica indirizzo mittente</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Bitcoin address.</source>
-        <translation type="unfinished">L'indirizzo inserito "%1" non è un indirizzo bitcoin valido.</translation>
+        <source>The entered address "%1" is not a valid Marscoin address.</source>
+        <translation type="unfinished">L'indirizzo inserito "%1" non è un indirizzo marscoin valido.</translation>
     </message>
     <message>
         <source>Address "%1" already exists as a receiving address with label "%2" and so cannot be added as a sending address.</source>
@@ -1377,8 +1377,8 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
         </translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Bitcoin block chain.</source>
-        <translation type="unfinished">%1 scaricherà e salverà una copia della catena di blocchi Bitcoin.</translation>
+        <source>%1 will download and store a copy of the Marscoin block chain.</source>
+        <translation type="unfinished">%1 scaricherà e salverà una copia della catena di blocchi Marscoin.</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1466,12 +1466,12 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
         <translation type="unfinished">Modulo</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the bitcoin network, as detailed below.</source>
-        <translation type="unfinished">Transazioni recenti potrebbero non essere visibili ancora, perciò il saldo del tuo portafoglio potrebbe non essere corretto. Questa informazione risulterà corretta quando il tuo portafoglio avrà terminato la sincronizzazione con la rete bitcoin, come indicato in dettaglio più sotto.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the marscoin network, as detailed below.</source>
+        <translation type="unfinished">Transazioni recenti potrebbero non essere visibili ancora, perciò il saldo del tuo portafoglio potrebbe non essere corretto. Questa informazione risulterà corretta quando il tuo portafoglio avrà terminato la sincronizzazione con la rete marscoin, come indicato in dettaglio più sotto.</translation>
     </message>
     <message>
-        <source>Attempting to spend bitcoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation type="unfinished">Il tentativo di spendere bitcoin legati a transazioni non ancora visualizzate non verrà accettato dalla rete.</translation>
+        <source>Attempting to spend marscoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation type="unfinished">Il tentativo di spendere marscoin legati a transazioni non ancora visualizzate non verrà accettato dalla rete.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1525,8 +1525,8 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open bitcoin URI</source>
-        <translation type="unfinished">Apri un URI bitcoin</translation>
+        <source>Open marscoin URI</source>
+        <translation type="unfinished">Apri un URI marscoin</translation>
     </message>
     <message>
         <source>Paste address from clipboard</source>
@@ -1689,16 +1689,16 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
         <translation type="unfinished">Percorso per lo script &amp;esterno di firma</translation>
     </message>
     <message>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation type="unfinished">Apri automaticamente la porta del client Bitcoin sul router. Il protocollo UPnP deve essere supportato da parte del router ed attivo.</translation>
+        <source>Automatically open the Marscoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation type="unfinished">Apri automaticamente la porta del client Marscoin sul router. Il protocollo UPnP deve essere supportato da parte del router ed attivo.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
         <translation type="unfinished">Mappa le porte tramite &amp;UPnP</translation>
     </message>
     <message>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports NAT-PMP and it is enabled. The external port could be random.</source>
-        <translation type="unfinished">Apri automaticamente la porta del client Bitcoin sul router. Funziona solo quando il router supporta NAT-PMP ed è abilitato. La porta esterna potrebbe essere casuale.</translation>
+        <source>Automatically open the Marscoin client port on the router. This only works when your router supports NAT-PMP and it is enabled. The external port could be random.</source>
+        <translation type="unfinished">Apri automaticamente la porta del client Marscoin sul router. Funziona solo quando il router supporta NAT-PMP ed è abilitato. La porta esterna potrebbe essere casuale.</translation>
     </message>
     <message>
         <source>Map port using NA&amp;T-PMP</source>
@@ -1713,8 +1713,8 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
         <translation type="unfinished">Accetta connessioni in entrata</translation>
     </message>
     <message>
-        <source>Connect to the Bitcoin network through a SOCKS5 proxy.</source>
-        <translation type="unfinished">Connessione alla rete Bitcoin attraverso un proxy SOCKS5.</translation>
+        <source>Connect to the Marscoin network through a SOCKS5 proxy.</source>
+        <translation type="unfinished">Connessione alla rete Marscoin attraverso un proxy SOCKS5.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1778,7 +1778,7 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
-        <translation type="unfinished">Scegli l'unità di suddivisione predefinita da utilizzare per l'interfaccia e per l'invio di bitcoin.</translation>
+        <translation type="unfinished">Scegli l'unità di suddivisione predefinita da utilizzare per l'interfaccia e per l'invio di marscoin.</translation>
     </message>
     <message>
         <source>Third-party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</source>
@@ -1793,8 +1793,8 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
         <translation type="unfinished">Specifica se le funzionalita di coin control saranno visualizzate.</translation>
     </message>
     <message>
-        <source>Connect to the Bitcoin network through a separate SOCKS5 proxy for Tor onion services.</source>
-        <translation type="unfinished">Connette alla rete Bitcoin attraverso un proxy SOCKS5 separato per i Tor onion services.</translation>
+        <source>Connect to the Marscoin network through a separate SOCKS5 proxy for Tor onion services.</source>
+        <translation type="unfinished">Connette alla rete Marscoin attraverso un proxy SOCKS5 separato per i Tor onion services.</translation>
     </message>
     <message>
         <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor onion services:</source>
@@ -1886,8 +1886,8 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
         <translation type="unfinished">Modulo</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="unfinished">Le informazioni visualizzate potrebbero non essere aggiornate. Il portafoglio si sincronizza automaticamente con la rete Bitcoin una volta stabilita una connessione, ma questo processo non è ancora stato completato.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Marscoin network after a connection is established, but this process has not completed yet.</source>
+        <translation type="unfinished">Le informazioni visualizzate potrebbero non essere aggiornate. Il portafoglio si sincronizza automaticamente con la rete Marscoin una volta stabilita una connessione, ma questo processo non è ancora stato completato.</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -2101,16 +2101,16 @@ Il processo di migrazione creerà un backup del portafoglio prima della migrazio
         <translation type="unfinished">Errore di richiesta di pagamento</translation>
     </message>
     <message>
-        <source>Cannot start bitcoin: click-to-pay handler</source>
-        <translation type="unfinished">Impossibile avviare bitcoin: gestore click-to-pay</translation>
+        <source>Cannot start marscoin: click-to-pay handler</source>
+        <translation type="unfinished">Impossibile avviare marscoin: gestore click-to-pay</translation>
     </message>
     <message>
         <source>URI handling</source>
         <translation type="unfinished">Gestione URI</translation>
     </message>
     <message>
-        <source>'bitcoin://' is not a valid URI. Use 'bitcoin:' instead.</source>
-        <translation type="unfinished">'bitcoin://' non è un URI valido. Usa invece 'bitcoin:'.</translation>
+        <source>'marscoin://' is not a valid URI. Use 'marscoin:' instead.</source>
+        <translation type="unfinished">'marscoin://' non è un URI valido. Usa invece 'marscoin:'.</translation>
     </message>
     <message>
         <source>Cannot process payment request because BIP70 is not supported.
@@ -2121,8 +2121,8 @@ A causa delle diffuse falle di sicurezza in BIP70, si consiglia vivamente di ign
 Se ricevi questo errore, dovresti richiedere al commerciante di fornire un URI compatibile con BIP21.</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
-        <translation type="unfinished">Impossibile interpretare l'URI! I parametri dell'URI o l'indirizzo Bitcoin potrebbero non essere corretti.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Marscoin address or malformed URI parameters.</source>
+        <translation type="unfinished">Impossibile interpretare l'URI! I parametri dell'URI o l'indirizzo Marscoin potrebbero non essere corretti.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -2261,8 +2261,8 @@ Se ricevi questo errore, dovresti richiedere al commerciante di fornire un URI c
         <translation type="unfinished">Indirizzi Locali</translation>
     </message>
     <message>
-        <source>Network addresses that your Bitcoin node is currently using to communicate with other nodes.</source>
-        <translation type="unfinished">Indirizzi di rete che il tuo nodo Bitcoin sta usando per comunicare con altri nodi.</translation>
+        <source>Network addresses that your Marscoin node is currently using to communicate with other nodes.</source>
+        <translation type="unfinished">Indirizzi di rete che il tuo nodo Marscoin sta usando per comunicare con altri nodi.</translation>
     </message>
     <message>
         <source>Block chain</source>
@@ -2688,8 +2688,8 @@ Per ulteriori informazioni su come usare la console, premi %6.
         <translation type="unfinished">&amp;Messaggio:</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
-        <translation type="unfinished">Un messaggio opzionale da allegare e mostrare all'apertura della richiesta di pagamento. Nota: Il messaggio non sarà inviato con il pagamento sulla rete Bitcoin.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Marscoin network.</source>
+        <translation type="unfinished">Un messaggio opzionale da allegare e mostrare all'apertura della richiesta di pagamento. Nota: Il messaggio non sarà inviato con il pagamento sulla rete Marscoin.</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2981,8 +2981,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
 Nota: poiché la commissione è calcolata su base per byte, una commissione di "100 satoshi per kB" per una dimensione di transazione di 500 byte (metà di 1 kB) alla fine produrrà una commissione di soli 50 satoshi.</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for bitcoin transactions than the network can process.</source>
-        <translation type="unfinished">Quando il volume delle transazioni è minore dello spazio nei blocchi, i minatori e in nodi di relay potrebbero imporre una commissione minima. Va benissimo pagare solo questa commissione minima, ma tieni presente che questo potrebbe risultare in una transazione che, se la richiesta di transazioni bitcoin dovesse superare la velocità con cui la rete riesce ad elaborarle, non viene mai confermata.</translation>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for marscoin transactions than the network can process.</source>
+        <translation type="unfinished">Quando il volume delle transazioni è minore dello spazio nei blocchi, i minatori e in nodi di relay potrebbero imporre una commissione minima. Va benissimo pagare solo questa commissione minima, ma tieni presente che questo potrebbe risultare in una transazione che, se la richiesta di transazioni marscoin dovesse superare la velocità con cui la rete riesce ad elaborarle, non viene mai confermata.</translation>
     </message>
     <message>
         <source>A too low fee might result in a never confirming transaction (read the tooltip)</source>
@@ -3067,8 +3067,8 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">Cr&amp;ea Non Firmata</translation>
     </message>
     <message>
-        <source>Creates a Partially Signed Bitcoin Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
-        <translation type="unfinished">Crea una Transazione Bitcoin Parzialmente Firmata (PSBT) da utilizzare con ad es. un portafoglio %1 offline o un portafoglio hardware compatibile con PSBT.</translation>
+        <source>Creates a Partially Signed Marscoin Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation type="unfinished">Crea una Transazione Marscoin Parzialmente Firmata (PSBT) da utilizzare con ad es. un portafoglio %1 offline o un portafoglio hardware compatibile con PSBT.</translation>
     </message>
     <message>
         <source>%1 to %2</source>
@@ -3119,9 +3119,9 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">Si puó aumentare la commissione successivamente (segnalando Replace-By-Fee, BIP-125).</translation>
     </message>
     <message>
-        <source>Please, review your transaction proposal. This will produce a Partially Signed Bitcoin Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <source>Please, review your transaction proposal. This will produce a Partially Signed Marscoin Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
         <extracomment>Text to inform a user attempting to create a transaction of their current options. At this stage, a user can only create a PSBT. This string is displayed when private keys are disabled and an external signer is not available.</extracomment>
-        <translation type="unfinished">Per favore, controlla la tua proposta di transazione. Questo produrrà una Partially Signed Bitcoin Transaction (PSBT) che puoi salvare o copiare e quindi firmare con es. un portafoglio %1 offline o un portafoglio hardware compatibile con PSBT.</translation>
+        <translation type="unfinished">Per favore, controlla la tua proposta di transazione. Questo produrrà una Partially Signed Marscoin Transaction (PSBT) che puoi salvare o copiare e quindi firmare con es. un portafoglio %1 offline o un portafoglio hardware compatibile con PSBT.</translation>
     </message>
     <message>
         <source>%1 from wallet '%2'</source>
@@ -3133,9 +3133,9 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">Vuoi creare questa transazione?</translation>
     </message>
     <message>
-        <source>Please, review your transaction. You can create and send this transaction or create a Partially Signed Bitcoin Transaction (PSBT), which you can save or copy and then sign with, e.g., an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <source>Please, review your transaction. You can create and send this transaction or create a Partially Signed Marscoin Transaction (PSBT), which you can save or copy and then sign with, e.g., an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
         <extracomment>Text to inform a user attempting to create a transaction of their current options. At this stage, a user can send their transaction or create a PSBT. This string is displayed when both private keys and PSBT controls are enabled.</extracomment>
-        <translation type="unfinished">Per favore, controlla la tua transazione. Puoi creare e inviare questa transazione o creare una Transazione Bitcoin Parzialmente Firmata (PSBT, Partially Signed Bitcoin Transaction) che puoi salvare o copiare, e poi firmare con ad esempio un portafoglio %1 offline o un portafoglio hardware compatibile con PSBT.</translation>
+        <translation type="unfinished">Per favore, controlla la tua transazione. Puoi creare e inviare questa transazione o creare una Transazione Marscoin Parzialmente Firmata (PSBT, Partially Signed Marscoin Transaction) che puoi salvare o copiare, e poi firmare con ad esempio un portafoglio %1 offline o un portafoglio hardware compatibile con PSBT.</translation>
     </message>
     <message>
         <source>Please, review your transaction.</source>
@@ -3212,8 +3212,8 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         </translation>
     </message>
     <message>
-        <source>Warning: Invalid Bitcoin address</source>
-        <translation type="unfinished">Attenzione: Indirizzo Bitcoin non valido</translation>
+        <source>Warning: Invalid Marscoin address</source>
+        <translation type="unfinished">Attenzione: Indirizzo Marscoin non valido</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -3251,8 +3251,8 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">Scegli un indirizzo usato precedentemente</translation>
     </message>
     <message>
-        <source>The Bitcoin address to send the payment to</source>
-        <translation type="unfinished">L'indirizzo Bitcoin a cui vuoi inviare il pagamento</translation>
+        <source>The Marscoin address to send the payment to</source>
+        <translation type="unfinished">L'indirizzo Marscoin a cui vuoi inviare il pagamento</translation>
     </message>
     <message>
         <source>Paste address from clipboard</source>
@@ -3267,8 +3267,8 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">L'ammontare da inviare nell'unità selezionata</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less bitcoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation type="unfinished">La commissione sarà sottratta dall'importo che si sta inviando. Il beneficiario riceverà un totale di bitcoin inferiore al valore digitato. Nel caso in cui siano stati selezionati più beneficiari la commissione sarà suddivisa in parti uguali.</translation>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less marscoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation type="unfinished">La commissione sarà sottratta dall'importo che si sta inviando. Il beneficiario riceverà un totale di marscoin inferiore al valore digitato. Nel caso in cui siano stati selezionati più beneficiari la commissione sarà suddivisa in parti uguali.</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -3287,8 +3287,8 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">Inserisci un'etichetta per questo indirizzo per aggiungerlo alla lista degli indirizzi utilizzati</translation>
     </message>
     <message>
-        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
-        <translation type="unfinished">Messaggio incluso nel bitcoin URI e che sarà memorizzato con la transazione per tuo riferimento. Nota: Questo messaggio non sarà inviato attraverso la rete Bitcoin.</translation>
+        <source>A message that was attached to the marscoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Marscoin network.</source>
+        <translation type="unfinished">Messaggio incluso nel marscoin URI e che sarà memorizzato con la transazione per tuo riferimento. Nota: Questo messaggio non sarà inviato attraverso la rete Marscoin.</translation>
     </message>
 </context>
 <context>
@@ -3313,12 +3313,12 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">&amp;Firma Messaggio</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your legacy (P2PKH) addresses to prove you can receive bitcoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation type="unfinished">È possibile firmare messaggi/accordi con i tuoi indirizzi (P2PKH) legacy per dimostrare di poter ricevere bitcoin attraverso di essi. Presta attenzione a non firmare dichiarazioni vaghe o casuali, perché attacchi di phishing potrebbero cercare di indurti ad apporre la firma su di esse. Firma esclusivamente dichiarazioni completamente dettagliate e delle quali condividi in pieno il contenuto.</translation>
+        <source>You can sign messages/agreements with your legacy (P2PKH) addresses to prove you can receive marscoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation type="unfinished">È possibile firmare messaggi/accordi con i tuoi indirizzi (P2PKH) legacy per dimostrare di poter ricevere marscoin attraverso di essi. Presta attenzione a non firmare dichiarazioni vaghe o casuali, perché attacchi di phishing potrebbero cercare di indurti ad apporre la firma su di esse. Firma esclusivamente dichiarazioni completamente dettagliate e delle quali condividi in pieno il contenuto.</translation>
     </message>
     <message>
-        <source>The Bitcoin address to sign the message with</source>
-        <translation type="unfinished">Indirizzo Bitcoin da utilizzare per firmare il messaggio</translation>
+        <source>The Marscoin address to sign the message with</source>
+        <translation type="unfinished">Indirizzo Marscoin da utilizzare per firmare il messaggio</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -3341,8 +3341,8 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">Copia la firma corrente nella clipboard</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Bitcoin address</source>
-        <translation type="unfinished">Firma un messaggio per dimostrare di possedere questo indirizzo Bitcoin</translation>
+        <source>Sign the message to prove you own this Marscoin address</source>
+        <translation type="unfinished">Firma un messaggio per dimostrare di possedere questo indirizzo Marscoin</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -3365,8 +3365,8 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">Per verificare il messaggio inserire l'indirizzo del firmatario, il messaggio e la firma nei campi sottostanti, assicurandosi di copiare esattamente anche ritorni a capo, spazi, tabulazioni, etc.. Si raccomanda di non lasciarsi fuorviare dalla firma a leggere più di quanto non sia riportato nel testo del messaggio stesso, in modo da evitare di cadere vittima di attacchi di tipo man-in-the-middle. Si ricorda che la verifica della firma dimostra soltanto che il firmatario può ricevere pagamenti con l'indirizzo corrispondente, non prova l'invio di alcuna transazione.</translation>
     </message>
     <message>
-        <source>The Bitcoin address the message was signed with</source>
-        <translation type="unfinished">L'indirizzo Bitcoin con cui è stato contrassegnato il messaggio</translation>
+        <source>The Marscoin address the message was signed with</source>
+        <translation type="unfinished">L'indirizzo Marscoin con cui è stato contrassegnato il messaggio</translation>
     </message>
     <message>
         <source>The signed message to verify</source>
@@ -3377,7 +3377,7 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
         <translation type="unfinished">La firma data al momento della firma del messaggio</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
+        <source>Verify the message to ensure it was signed with the specified Marscoin address</source>
         <translation type="unfinished">Verifica il messaggio per accertare che sia stato firmato con l'indirizzo specificato</translation>
     </message>
     <message>
@@ -3597,7 +3597,7 @@ Nota: poiché la commissione è calcolata su base per byte, una commissione di "
     </message>
     <message>
         <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation type="unfinished">I bitcoin generati devono maturare %1 blocchi prima di poter essere spesi. Quando hai generato questo blocco, è stato trasmesso alla rete per essere aggiunto alla block chain. Se l'inserimento nella catena avrà esito negativo, il suo stato cambierà a "non accettato" e non sarà spendibile. Talvolta ciò può accadere anche nel caso in cui un altro nodo generi un blocco entro pochi secondi dal tuo.</translation>
+        <translation type="unfinished">I marscoin generati devono maturare %1 blocchi prima di poter essere spesi. Quando hai generato questo blocco, è stato trasmesso alla rete per essere aggiunto alla block chain. Se l'inserimento nella catena avrà esito negativo, il suo stato cambierà a "non accettato" e non sarà spendibile. Talvolta ciò può accadere anche nel caso in cui un altro nodo generi un blocco entro pochi secondi dal tuo.</translation>
     </message>
     <message>
         <source>Debug information</source>
@@ -4035,14 +4035,14 @@ Vai su File &gt; Apri Portafoglio per caricare un portafoglio.
     </message>
 </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>marscoin-core</name>
     <message>
         <source>The %s developers</source>
         <translation type="unfinished">Sviluppatori di %s</translation>
     </message>
     <message>
-        <source>%s corrupt. Try using the wallet tool bitcoin-wallet to salvage or restoring a backup.</source>
-        <translation type="unfinished">%s corrotto. Prova a usare la funzione del portafoglio bitcoin-wallet per salvare o recuperare il backup.</translation>
+        <source>%s corrupt. Try using the wallet tool marscoin-wallet to salvage or restoring a backup.</source>
+        <translation type="unfinished">%s corrotto. Prova a usare la funzione del portafoglio marscoin-wallet per salvare o recuperare il backup.</translation>
     </message>
     <message>
         <source>%s failed to validate the -assumeutxo snapshot state. This indicates a hardware problem, or a bug in the software, or a bad software modification that allowed an invalid snapshot to be loaded. As a result of this, the node will shut down and stop using any state that was built on the snapshot, resetting the chain height from %d to %d. On the next restart, the node will resume syncing from %d without using any snapshot data. Please report this incident to %s, including how you obtained the snapshot. The invalid snapshot chainstate will be left on disk in case it is helpful in diagnosing the issue that caused this error.</source>
@@ -4089,8 +4089,8 @@ Vai su File &gt; Apri Portafoglio per caricare un portafoglio.
         <translation type="unfinished">Errore: l'identificativo rispetto la registrazione del dumpfile è incorretta.  ricevuto "%s", sarebbe dovuto essere "%s".</translation>
     </message>
     <message>
-        <source>Error: Dumpfile version is not supported. This version of bitcoin-wallet only supports version 1 dumpfiles. Got dumpfile with version %s</source>
-        <translation type="unfinished">Errore: la versione di questo dumpfile non è supportata. Questa versione del bitcoin-wallet supporta solo la versione 1 dei dumpfile. Ricevuto un dumpfile di versione%s</translation>
+        <source>Error: Dumpfile version is not supported. This version of marscoin-wallet only supports version 1 dumpfiles. Got dumpfile with version %s</source>
+        <translation type="unfinished">Errore: la versione di questo dumpfile non è supportata. Questa versione del marscoin-wallet supporta solo la versione 1 dei dumpfile. Ricevuto un dumpfile di versione%s</translation>
     </message>
     <message>
         <source>Error: Legacy wallets only support the "legacy", "p2sh-segwit", and "bech32" address types</source>
