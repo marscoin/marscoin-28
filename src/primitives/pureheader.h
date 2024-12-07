@@ -145,8 +145,7 @@ public:
      */
     inline bool IsLegacy() const
     {
-        return nVersion >= 1 &&
-               nVersion <= 4;
+        return ((nVersion >= 1 && nVersion <= 4) || nVersion == 0x002a0004);
     }
 };
 
