@@ -457,7 +457,6 @@ libmarscoin_node_a_SOURCES = \
   policy/truc_policy.cpp \
   pow.cpp \
   rest.cpp \
-  rpc/auxpow.cpp \
   rpc/auxpow_miner.cpp \
   rpc/blockchain.cpp \
   rpc/fees.cpp \
@@ -521,6 +520,8 @@ libmarscoin_wallet_a_SOURCES = \
   wallet/load.cpp \
   wallet/migrate.cpp \
   wallet/receive.cpp \
+  wallet/rpc/auxpow.cpp \
+  rpc/auxpow_miner.cpp \
   wallet/rpc/addresses.cpp \
   wallet/rpc/backup.cpp \
   wallet/rpc/coins.cpp \

@@ -1174,9 +1174,6 @@ static RPCHelpMan submitauxblock()
     };
 }
 
-//forward declaration for getauxblock
-RPCHelpMan getauxblock();
-
 /* ************************************************************************** */
 void RegisterMiningRPCCommands(CRPCTable& t)
 {
@@ -1189,7 +1186,6 @@ void RegisterMiningRPCCommands(CRPCTable& t)
         {"mining", &submitblock},
         {"mining", &submitheader},
 
-        {"mining", &getauxblock},
         {"mining", &createauxblock},
         {"mining", &submitauxblock},
 

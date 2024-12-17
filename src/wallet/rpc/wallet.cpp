@@ -1098,6 +1098,9 @@ RPCHelpMan abandontransaction();
 RPCHelpMan rescanblockchain();
 RPCHelpMan abortrescan();
 
+// auxpow
+RPCHelpMan getauxblock();
+
 Span<const CRPCCommand> GetWalletRPCCommands()
 {
     static const CRPCCommand commands[]{
@@ -1172,6 +1175,8 @@ Span<const CRPCCommand> GetWalletRPCCommands()
         {"wallet", &walletpassphrase},
         {"wallet", &walletpassphrasechange},
         {"wallet", &walletprocesspsbt},
+        /** Auxpow wallet functions */
+        {"wallet", &getauxblock},
     };
     return commands;
 }
