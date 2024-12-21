@@ -33,11 +33,11 @@ void auxMiningCheck(const node::NodeContext& node)
   if (connman.GetNodeCount (ConnectionDirection::Both) == 0
         && !Params ().MineBlocksOnDemand ())
     throw JSONRPCError (RPC_CLIENT_NOT_CONNECTED,
-                        "Namecoin is not connected!");
+                        "Marscoin is not connected!");
 
   if (chainman.IsInitialBlockDownload () && !Params ().MineBlocksOnDemand ())
     throw JSONRPCError (RPC_CLIENT_IN_INITIAL_DOWNLOAD,
-                        "Namecoin is downloading blocks...");
+                        "Marscoin is downloading blocks...");
 
   /* This should never fail, since the chain is already
      past the point of merge-mining start.  Check nevertheless.  */
@@ -95,6 +95,7 @@ AuxpowMiner::getCurrentBlock (ChainstateManager& chainman, Mining& miner,
         /* Finalise it by setting the version and building the merkle root.  */
         newBlock.hashMerkleRoot = BlockMerkleRoot (newBlock);
         newBlock.SetAuxpowVersion (true);
+        newBlock.SetChainId(Params().GetConsensus().nAuxpowChainId);
 
         /* Save in our map of constructed blocks.  */
         pblockCur = &newBlock;
@@ -172,7 +173,7 @@ AuxpowMiner::submitAuxBlock (const JSONRPCRequest& request,
 {
   const auto& node = EnsureAnyNodeContext (request);
   auxMiningCheck (node);
-  auto& mining = EnsureMining (node);
+  auto& chainman = EnsureChainman (node);
 
   std::shared_ptr<CBlock> shared_block;
   {
@@ -188,7 +189,7 @@ AuxpowMiner::submitAuxBlock (const JSONRPCRequest& request,
   shared_block->SetAuxpow (std::move (pow));
   assert (shared_block->GetHash ().GetHex () == hashHex);
 
-  return mining.processNewBlock (shared_block, nullptr);
+  return chainman.ProcessNewBlock (shared_block, true, true, nullptr);
 }
 
 AuxpowMiner&

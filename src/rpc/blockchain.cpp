@@ -778,6 +778,7 @@ static RPCHelpMan getblock()
                     {RPCResult::Type::NUM, "nTx", "The number of transactions in the block"},
                     {RPCResult::Type::STR_HEX, "previousblockhash", /*optional=*/true, "The hash of the previous block (if available)"},
                     {RPCResult::Type::STR_HEX, "nextblockhash", /*optional=*/true, "The hash of the next block (if available)"},
+                    AUXPOW_RESULT,
                 }},
                     RPCResult{"for verbosity = 2",
                 RPCResult::Type::OBJ, "", "",
@@ -854,7 +855,12 @@ static RPCHelpMan getblock()
         tx_verbosity = TxVerbosity::SHOW_DETAILS_AND_PREVOUT;
     }
 
-    return blockToJSON(chainman.m_blockman, block, *tip, *pblockindex, tx_verbosity);
+    auto result = blockToJSON(chainman.m_blockman, block, *tip, *pblockindex, tx_verbosity);
+
+    if (block.auxpow)
+        result.pushKV("auxpow", AuxpowToJSON(*block.auxpow, verbosity >= 1, chainman.ActiveChainstate()));
+
+    return result;
 },
     };
 }
@@ -1269,6 +1275,9 @@ static void SoftForkDescPushBack(const CBlockIndex* blockindex, UniValue& softfo
 
 static void SoftForkDescPushBack(const CBlockIndex* blockindex, UniValue& softforks, const ChainstateManager& chainman, Consensus::DeploymentPos id)
 {
+    // FIXME: For now, BIP9 is not used until we can do always-auxpow.
+    return;
+
     // For BIP9 deployments.
 
     if (!DeploymentEnabled(chainman, id)) return;

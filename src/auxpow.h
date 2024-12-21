@@ -128,15 +128,6 @@ public:
   }
 
   /**
-   * Returns the parent block hash.  This is used to validate the PoW.
-   */
-  inline uint256
-  getParentBlockHash () const
-  {
-    return parentBlock.GetHash ();
-  }
-
-  /**
    * Return parent block.  This is only used for the temporary parentblock
    * auxpow version check.
    * @return The parent block.
