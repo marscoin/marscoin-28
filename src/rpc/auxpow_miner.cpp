@@ -80,8 +80,12 @@ AuxpowMiner::getCurrentBlock (ChainstateManager& chainman, Mining& miner,
           }
 
         /* Create new block with nonce = 0 and extraNonce = 1.  */
+        node::BlockCreateOptions opt;
+        opt.coinbase_output_script = scriptPubKey;
+        opt.use_auxpow = true;
+        opt.use_mempool = false;
         std::unique_ptr<interfaces::BlockTemplate> newTemplate
-            = miner.createNewBlock (scriptPubKey);
+            = miner.createNewBlock (opt);
         if (newTemplate == nullptr)
           throw JSONRPCError (RPC_OUT_OF_MEMORY, "out of memory");
         blocks.push_back (std::make_unique<CBlock> (newTemplate->getBlock ()));
