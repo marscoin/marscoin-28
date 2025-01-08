@@ -71,7 +71,7 @@ const CBlock* AuxpowMiner::getCurrentBlock(ChainstateManager& chainman, Mining& 
             node::BlockCreateOptions opt;
             opt.coinbase_output_script = scriptPubKey;
             opt.use_auxpow = true;
-            opt.use_mempool = false;
+            opt.use_mempool = true;
             std::unique_ptr<interfaces::BlockTemplate> newTemplate
                 = miner.createNewBlock(opt);
             if (newTemplate == nullptr)
