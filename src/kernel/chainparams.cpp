@@ -100,7 +100,9 @@ public:
         consensus.powLimit = uint256{"00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60;
         consensus.nPowTargetSpacing = 2.5 * 60;
+        consensus.nASERTAnchor = 2999999;
         consensus.nASERTHalfLife = 2 * 60 * 60;
+        consensus.nASERTSpacing = 123;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.enforce_BIP94 = false;
         consensus.fPowNoRetargeting = false;
@@ -241,7 +243,9 @@ public:
         consensus.powLimit = uint256{"00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60;
         consensus.nPowTargetSpacing = 2.5 * 60;
+        consensus.nASERTAnchor = 100;
         consensus.nASERTHalfLife = 2 * 60 * 60;
+        consensus.nASERTSpacing = 123;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.enforce_BIP94 = false;
         consensus.fPowNoRetargeting = false;
@@ -341,7 +345,9 @@ public:
         consensus.powLimit = uint256{"00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60;
         consensus.nPowTargetSpacing = 2.5 * 60;
+        consensus.nASERTAnchor = 100;
         consensus.nASERTHalfLife = 2 * 60 * 60;
+        consensus.nASERTSpacing = 123;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.enforce_BIP94 = true;
         consensus.fPowNoRetargeting = false;

@@ -117,7 +117,9 @@ struct Params {
     bool fPowNoRetargeting;
     int64_t nPowTargetSpacing;
     int64_t nPowTargetTimespan;
+    int64_t nASERTAnchor;
     int64_t nASERTHalfLife;
+    int64_t nASERTSpacing;
     std::chrono::seconds PowTargetSpacing() const
     {
         return std::chrono::seconds{nPowTargetSpacing};
