@@ -24,10 +24,7 @@ class Chainstate;
 class CValidationState;
 class UniValue;
 
-namespace auxpow_tests
-{
-class CAuxPowForTest;
-}
+typedef std::vector<unsigned char> valtype;
 
 /** Header for merge-mining data in the coinbase.  */
 static const unsigned char pchMergedMiningHeader[] = { 0xfa, 0xbe, 'm', 'm' };
@@ -39,7 +36,6 @@ static const unsigned char pchMergedMiningHeader[] = { 0xfa, 0xbe, 'm', 'm' };
  */
 class CAuxPow
 {
-
 private:
 
   /** The parent block's coinbase transaction.  */
@@ -61,30 +57,20 @@ private:
    * Check a merkle branch.  This used to be in CBlock, but was removed
    * upstream.  Thus include it here now.
    */
-  static uint256 CheckMerkleBranch (uint256 hash,
-                                    const std::vector<uint256>& vMerkleBranch,
-                                    int nIndex);
-
-  friend UniValue AuxpowToJSON(const CAuxPow& auxpow, bool verbose,
-                               Chainstate& active_chainstate);
-  friend class auxpow_tests::CAuxPowForTest;
+  static uint256 CheckMerkleBranch (uint256 hash, const std::vector<uint256>& vMerkleBranch, int nIndex);
+  friend UniValue AuxpowToJSON(const CAuxPow& auxpow, bool verbose, Chainstate& active_chainstate);
 
 public:
 
   /* Prevent accidental conversion.  */
-  inline explicit CAuxPow (CTransactionRef&& txIn)
-    : coinbaseTx (std::move (txIn))
-  {}
-
-  CAuxPow () = default;
-
-  CAuxPow (CAuxPow&&) = default;
+  inline explicit CAuxPow(CTransactionRef&& txIn) : coinbaseTx (std::move(txIn)) {}
+  CAuxPow() = default;
+  CAuxPow(CAuxPow&&) = default;
   CAuxPow& operator= (CAuxPow&&) = default;
-
-  CAuxPow (const CAuxPow&) = delete;
+  CAuxPow(const CAuxPow&) = delete;
   void operator= (const CAuxPow&) = delete;
 
-  SERIALIZE_METHODS (CAuxPow, obj)
+  SERIALIZE_METHODS(CAuxPow, obj)
   {
     /* The coinbase Merkle tx' hashBlock field is never actually verified
        or used in the code for an auxpow (and never was).  The parent block
@@ -97,11 +83,10 @@ public:
     int nIndex = 0;
 
     /* Data from the coinbase transaction as Merkle tx.  */
-    READWRITE (TX_WITH_WITNESS (obj.coinbaseTx), hashBlock,
-               obj.vMerkleBranch, nIndex);
+    READWRITE(TX_WITH_WITNESS(obj.coinbaseTx), hashBlock, obj.vMerkleBranch, nIndex);
 
     /* Additional data for the auxpow itself.  */
-    READWRITE (obj.vChainMerkleBranch, obj.nChainIndex, obj.parentBlock);
+    READWRITE(obj.vChainMerkleBranch, obj.nChainIndex, obj.parentBlock);
   }
 
   /**
@@ -113,27 +98,16 @@ public:
    * @param params Consensus parameters.
    * @return True if the auxpow is valid.
    */
-  bool check (const uint256& hashAuxBlock, int nChainId,
-              const Consensus::Params& params) const;
+  bool check(const uint256& hashAuxBlock, int nChainId, const Consensus::Params& params) const;
 
   /**
    * Get the parent block's hash.  This is used to verify that it
    * satisfies the PoW requirement.
    * @return The parent block hash.
    */
-  inline uint256
-  getParentBlockPoWHash() const
+  inline uint256 getParentBlockPoWHash() const
   {
-    return parentBlock.GetPoWHash ();
-  }
-
-  /**
-   * Returns the parent block hash.  This is used to validate the PoW.
-   */
-  inline uint256
-  getParentBlockHash () const
-  {
-    return parentBlock.GetHash ();
+    return parentBlock.GetPoWHash();
   }
 
   /**
@@ -141,9 +115,7 @@ public:
    * auxpow version check.
    * @return The parent block.
    */
-  /* FIXME: Remove after the hardfork.  */
-  inline const CPureBlockHeader&
-  getParentBlock () const
+  inline const CPureBlockHeader& getParentBlock() const
   {
     return parentBlock;
   }
@@ -156,7 +128,7 @@ public:
    * @param h The merkle block height.
    * @return The expected index for the aux hash.
    */
-  static int getExpectedIndex (uint32_t nNonce, int nChainId, unsigned h);
+  static int getExpectedIndex(uint32_t nNonce, int nChainId, unsigned h);
 
   /**
    * Constructs a minimal CAuxPow object for the given block header and
@@ -164,15 +136,23 @@ public:
    * header already, since the block hash to which the auxpow commits depends
    * on that!
    */
-  static std::unique_ptr<CAuxPow> createAuxPow (const CPureBlockHeader& header);
+  static std::unique_ptr<CAuxPow> createAuxPow(const CPureBlockHeader& header);
 
   /**
    * Initialises the auxpow of the given block header.  This builds a minimal
    * auxpow object like createAuxPow and sets it on the block header.  Returns
    * a reference to the parent header so it can be mined as a follow-up.
    */
-  static CPureBlockHeader& initAuxPow (CBlockHeader& header);
+  static CPureBlockHeader& initAuxPow(CBlockHeader& header);
 
 };
+
+/**
+ * Check proof-of-work of a block header, taking auxpow into account.
+ * @param block The block header.
+ * @param params Consensus parameters.
+ * @return True iff the PoW is correct.
+ */
+bool CheckProofOfWork(const CBlockHeader& block, const Consensus::Params& params);
 
 #endif // BITCOIN_AUXPOW_H

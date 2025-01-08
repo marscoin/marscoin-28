@@ -21,11 +21,6 @@
 
 class ChainstateManager;
 
-namespace auxpow_tests
-{
-class AuxpowMinerForTest;
-}
-
 /**
  * This class holds "global" state used to construct blocks for the auxpow
  * mining RPCs and the map of already constructed blocks to look them up
@@ -62,32 +57,24 @@ private:
    * that should be returned to a miner for working on at the moment.  Also
    * fills in the difficulty target value.
    */
-  const CBlock* getCurrentBlock (ChainstateManager& chainman,
-                                 interfaces::Mining& miner,
-                                 const CTxMemPool& mempool,
-                                 const CScript& scriptPubKey, uint256& target)
-      EXCLUSIVE_LOCKS_REQUIRED (cs);
+  const CBlock* getCurrentBlock (ChainstateManager& chainman, interfaces::Mining& miner, const CTxMemPool& mempool, const CScript& scriptPubKey, uint256& target) EXCLUSIVE_LOCKS_REQUIRED (cs);
 
   /**
    * Looks up a previously constructed block by its (hex-encoded) hash.  If the
    * block is found, it is returned.  Otherwise, a JSONRPCError is thrown.
    */
-  const CBlock* lookupSavedBlock (const std::string& hashHex) const
-      EXCLUSIVE_LOCKS_REQUIRED (cs);
-
-  friend class auxpow_tests::AuxpowMinerForTest;
+  const CBlock* lookupSavedBlock (const std::string& hashHex) const EXCLUSIVE_LOCKS_REQUIRED (cs);
 
 public:
 
-  AuxpowMiner () = default;
+  AuxpowMiner() = default;
 
   /**
    * Performs the main work for the "createauxblock" RPC:  Construct a new block
    * to work on with the given address for the block reward and return the
    * necessary information for the miner to construct an auxpow for it.
    */
-  UniValue createAuxBlock (const JSONRPCRequest& request,
-                           const CScript& scriptPubKey);
+  UniValue createAuxBlock(const JSONRPCRequest& request, const CScript& scriptPubKey);
 
   /**
    * Performs the main work for the "submitauxblock" RPC:  Look up the block
@@ -95,15 +82,12 @@ public:
    * and try to submit it.  Returns true if all was successful and the block
    * was accepted.
    */
-  bool submitAuxBlock (const JSONRPCRequest& request,
-                       const std::string& hashHex,
-                       const std::string& auxpowHex) const;
+  bool submitAuxBlock(const JSONRPCRequest& request, const std::string& hashHex, const std::string& auxpowHex) const;
 
   /**
    * Returns the singleton instance of AuxpowMiner that is used for RPCs.
    */
   static AuxpowMiner& get ();
-
 };
 
 #endif // BITCOIN_RPC_AUXPOW_MINER_H

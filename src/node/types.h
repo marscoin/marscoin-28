@@ -14,6 +14,7 @@
 #define BITCOIN_NODE_TYPES_H
 
 #include <cstddef>
+#include <script/script.h>
 
 namespace node {
 enum class TransactionError {
@@ -33,6 +34,10 @@ struct BlockCreateOptions {
      */
     bool use_mempool{true};
     /**
+     * Set true for auxpow-type block
+     */
+    bool use_auxpow{false};
+    /**
      * The maximum additional weight which the pool will add to the coinbase
      * scriptSig, witness and outputs. This must include any additional
      * weight needed for larger CompactSize encoded lengths.
@@ -43,6 +48,22 @@ struct BlockCreateOptions {
      * transaction outputs.
      */
     size_t coinbase_output_max_additional_sigops{400};
+    /**
+     * Script to put in the coinbase transaction. The default is an
+     * anyone-can-spend dummy.
+     *
+     * Should only be used for tests, when the default doesn't suffice.
+     *
+     * Note that higher level code like the getblocktemplate RPC may omit the
+     * coinbase transaction entirely. It's instead constructed by pool software
+     * using fields like coinbasevalue, coinbaseaux and default_witness_commitment.
+     * This software typically also controls the payout outputs, even for solo
+     * mining.
+     *
+     * The size and sigops are not checked against
+     * coinbase_max_additional_weight and coinbase_output_max_additional_sigops.
+     */
+    CScript coinbase_output_script{CScript() << OP_TRUE};
 };
 } // namespace node
 

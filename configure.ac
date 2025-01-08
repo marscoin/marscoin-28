@@ -591,7 +591,7 @@ AC_ARG_ENABLE([util-wallet],
   [AS_HELP_STRING([--enable-util-wallet],
   [build marscoin-wallet])],
   [build_marscoin_wallet=$enableval],
-  [build_marscoin_wallet=$build_marscoin_utils])
+  [build_marscoin_wallet=no])
 
 AC_ARG_ENABLE([util-util],
   [AS_HELP_STRING([--enable-util-util],

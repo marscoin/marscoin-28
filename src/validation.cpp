@@ -1918,66 +1918,6 @@ PackageMempoolAcceptResult ProcessNewPackage(Chainstate& active_chainstate, CTxM
     return result;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CBlock and CBlockIndex
-//
-
-bool CheckProofOfWork(const CBlockHeader& block, const Consensus::Params& params)
-{
-    /* Except for legacy blocks with full version 1, ensure that
-       the chain ID is correct.  Legacy blocks are not allowed since
-       the merge-mining start, which is checked in AcceptBlockHeader
-       where the height is known.  */
-    if (!block.IsLegacy() && params.fStrictChainId
-        && block.GetChainId() != params.nAuxpowChainId) {
-        LogError ("%s : block does not have our chain ID (got %d, expected %d, full nVersion %d)",
-                  __func__, block.GetChainId(), params.nAuxpowChainId, block.nVersion);
-        return false;
-    }
-
-    /* If there is no auxpow, just check the block hash.  */
-    if (!block.auxpow)
-    {
-        if (block.IsAuxpow()) {
-            LogError ("%s : no auxpow on block with auxpow version", __func__);
-            return false;
-        }
-
-        if (!CheckProofOfWork(block.GetPoWHash(), block.nBits, params)) {
-            LogError ("%s : non-AUX proof of work failed", __func__);
-            return false;
-        }
-
-        return true;
-    }
-
-    /* We have auxpow.  Check it.  */
-
-    if (!block.IsAuxpow()) {
-        LogError ("%s : auxpow on block with non-auxpow version", __func__);
-        return false;
-    }
-
-    /* Temporary check:  Disallow parent blocks with auxpow version.  This is
-       for compatibility with the old client.  */
-    /* FIXME: Remove this check with a hardfork later on.  */
-    if (block.auxpow->getParentBlock().IsAuxpow()) {
-        LogError ("%s : auxpow parent block has auxpow version", __func__);
-        return false;
-    }
-
-    if (!CheckProofOfWork(block.auxpow->getParentBlockPoWHash(), block.nBits, params)) {
-        LogError ("%s : AUX proof of work failed", __func__);
-        return false;
-    }
-    if (!block.auxpow->check(block.GetHash(), block.GetChainId(), params)) {
-        LogError ("%s : AUX POW is not valid", __func__);
-        return false;
-    }
-
-    return true;
-}
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
     int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
@@ -2565,71 +2505,12 @@ bool Chainstate::ConnectBlock(const CBlock& block, BlockValidationState& state, 
     // two in the chain that violate it. This prevents exploiting the issue against nodes during their
     // initial block download.
     bool fEnforceBIP30 = !IsBIP30Repeat(*pindex);
+    // FIXME: Enable strict check after appropriate fork.
+    fEnforceBIP30 = false;
 
-    // Once BIP34 activated it was not possible to create new duplicate coinbases and thus other than starting
-    // with the 2 existing duplicate coinbase pairs, not possible to create overwriting txs.  But by the
-    // time BIP34 activated, in each of the existing pairs the duplicate coinbase had overwritten the first
-    // before the first had been spent.  Since those coinbases are sufficiently buried it's no longer possible to create further
-    // duplicate transactions descending from the known pairs either.
-    // If we're on the known chain at height greater than where BIP34 activated, we can save the db accesses needed for the BIP30 check.
-
-    // BIP34 requires that a block at height X (block X) has its coinbase
-    // scriptSig start with a CScriptNum of X (indicated height X).  The above
-    // logic of no longer requiring BIP30 once BIP34 activates is flawed in the
-    // case that there is a block X before the BIP34 height of 227,931 which has
-    // an indicated height Y where Y is greater than X.  The coinbase for block
-    // X would also be a valid coinbase for block Y, which could be a BIP30
-    // violation.  An exhaustive search of all mainnet coinbases before the
-    // BIP34 height which have an indicated height greater than the block height
-    // reveals many occurrences. The 3 lowest indicated heights found are
-    // 209,921, 490,897, and 1,983,702 and thus coinbases for blocks at these 3
-    // heights would be the first opportunity for BIP30 to be violated.
-
-    // The search reveals a great many blocks which have an indicated height
-    // greater than 1,983,702, so we simply remove the optimization to skip
-    // BIP30 checking for blocks at height 1,983,702 or higher.  Before we reach
-    // that block in another 25 years or so, we should take advantage of a
-    // future consensus change to do a new and improved version of BIP34 that
-    // will actually prevent ever creating any duplicate coinbases in the
-    // future.
-    static constexpr int BIP34_IMPLIES_BIP30_LIMIT = 1983702;
-
-    // There is no potential to create a duplicate coinbase at block 209,921
-    // because this is still before the BIP34 height and so explicit BIP30
-    // checking is still active.
-
-    // The final case is block 176,684 which has an indicated height of
-    // 490,897. Unfortunately, this issue was not discovered until about 2 weeks
-    // before block 490,897 so there was not much opportunity to address this
-    // case other than to carefully analyze it and determine it would not be a
-    // problem. Block 490,897 was, in fact, mined with a different coinbase than
-    // block 176,684, but it is important to note that even if it hadn't been or
-    // is remined on an alternate fork with a duplicate coinbase, we would still
-    // not run into a BIP30 violation.  This is because the coinbase for 176,684
-    // is spent in block 185,956 in transaction
-    // d4f7fbbf92f4a3014a230b2dc70b8058d02eb36ac06b4a0736d9d60eaa9e8781.  This
-    // spending transaction can't be duplicated because it also spends coinbase
-    // 0328dd85c331237f18e781d692c92de57649529bd5edf1d01036daea32ffde29.  This
-    // coinbase has an indicated height of over 4.2 billion, and wouldn't be
-    // duplicatable until that height, and it's currently impossible to create a
-    // chain that long. Nevertheless we may wish to consider a future soft fork
-    // which retroactively prevents block 490,897 from creating a duplicate
-    // coinbase. The two historical BIP30 violations often provide a confusing
-    // edge case when manipulating the UTXO and it would be simpler not to have
-    // another edge case to deal with.
-
-    // testnet3 has no blocks before the BIP34 height with indicated heights
-    // post BIP34 before approximately height 486,000,000. After block
-    // 1,983,702 testnet3 starts doing unnecessary BIP30 checking again.
     assert(pindex->pprev);
-    CBlockIndex* pindexBIP34height = pindex->pprev->GetAncestor(params.GetConsensus().BIP34Height);
-    //Only continue to enforce if we're below BIP34 activation height or the block hash at that height doesn't correspond.
-    fEnforceBIP30 = fEnforceBIP30 && (!pindexBIP34height || !(pindexBIP34height->GetBlockHash() == params.GetConsensus().BIP34Hash));
 
-    // TODO: Remove BIP30 checking from block height 1,983,702 on, once we have a
-    // consensus change that ensures coinbases at those heights cannot
-    // duplicate earlier coinbases.
-    if (fEnforceBIP30 || pindex->nHeight >= BIP34_IMPLIES_BIP30_LIMIT) {
+    if (fEnforceBIP30) {
         for (const auto& tx : block.vtx) {
             for (size_t o = 0; o < tx->vout.size(); o++) {
                 if (view.HaveCoin(COutPoint(tx->GetHash(), o))) {
@@ -4308,15 +4189,15 @@ static bool ContextualCheckBlock(const CBlock& block, BlockValidationState& stat
         }
     }
 
-    // Enforce rule that the coinbase starts with serialized block height
-    if (DeploymentActiveAfter(pindexPrev, chainman, Consensus::DEPLOYMENT_HEIGHTINCB))
-    {
-        CScript expect = CScript() << nHeight;
-        if (block.vtx[0]->vin[0].scriptSig.size() < expect.size() ||
-            !std::equal(expect.begin(), expect.end(), block.vtx[0]->vin[0].scriptSig.begin())) {
-            return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-cb-height", "block height mismatch in coinbase");
-        }
-    }
+    //  // Enforce rule that the coinbase starts with serialized block height
+    // if (DeploymentActiveAfter(pindexPrev, chainman, Consensus::DEPLOYMENT_HEIGHTINCB))
+    // {
+    //     CScript expect = CScript() << nHeight;
+    //     if (block.vtx[0]->vin[0].scriptSig.size() < expect.size() ||
+    //         !std::equal(expect.begin(), expect.end(), block.vtx[0]->vin[0].scriptSig.begin())) {
+    //         return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-cb-height", "block height mismatch in coinbase");
+    //     }
+    // }
 
     // Validation for witness commitments.
     // * We compute the witness hash (which is the hash including witnesses) of all the block's transactions, except the

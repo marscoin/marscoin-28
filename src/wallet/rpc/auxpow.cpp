@@ -11,6 +11,7 @@
 
 #include <univalue.h>
 
+namespace wallet {
 namespace
 {
 
@@ -69,7 +70,7 @@ public:
    * Retrieves the key to use for mining at the moment.
    */
   CScript
-  GetCoinbaseScript (wallet::CWallet* pwallet)
+  GetCoinbaseScript (CWallet* pwallet)
   {
     LOCK2 (cs, pwallet->cs_wallet);
 
@@ -77,7 +78,7 @@ public:
     if (mit != data.end ())
       return mit->second.coinbaseScript;
 
-    wallet::ReserveDestination rdest(pwallet, pwallet->m_default_address_type);
+    ReserveDestination rdest(pwallet, pwallet->m_default_address_type);
     const auto op_dest = rdest.GetReservedDestination (false);
     if (!op_dest)
       throw JSONRPCError (RPC_WALLET_KEYPOOL_RAN_OUT,
@@ -95,7 +96,7 @@ public:
    * to the set of blocks for the current key.
    */
   void
-  AddBlockHash (const wallet::CWallet* pwallet, const std::string& hashHex)
+  AddBlockHash (const CWallet* pwallet, const std::string& hashHex)
   {
     LOCK (cs);
 
@@ -108,7 +109,7 @@ public:
    * Marks a block as submitted, releasing the key for it (if any).
    */
   void
-  MarkBlockSubmitted (const wallet::CWallet* pwallet, const std::string& hashHex)
+  MarkBlockSubmitted (const CWallet* pwallet, const std::string& hashHex)
   {
     LOCK (cs);
 
@@ -164,11 +165,11 @@ RPCHelpMan getauxblock()
     if (request.params.size() != 0 && request.params.size() != 2)
         throw std::runtime_error(self.ToString());
 
-    std::shared_ptr<wallet::CWallet> const wallet = wallet::GetWalletForJSONRPCRequest(request);
+    std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
     if (!wallet) return NullUniValue;
-    wallet::CWallet* const pwallet = wallet.get();
+    CWallet* const pwallet = wallet.get();
 
-    if (pwallet->IsWalletFlagSet(wallet::WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+    if (pwallet->IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
         throw JSONRPCError(RPC_WALLET_ERROR, "Error: Private keys are disabled for this wallet");
     }
 
@@ -194,3 +195,4 @@ RPCHelpMan getauxblock()
 },
     };
 }
+} // namespace wallet
