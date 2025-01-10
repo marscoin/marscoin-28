@@ -522,6 +522,10 @@ public:
         m_best_height = height;
         m_best_block_time = time;
     };
+    int GetBestBlock() override
+    {
+        return m_best_height;
+    }
     void UnitTestMisbehaving(NodeId peer_id) override EXCLUSIVE_LOCKS_REQUIRED(!m_peer_mutex) { Misbehaving(*Assert(GetPeerRef(peer_id)), ""); };
     void ProcessMessage(CNode& pfrom, const std::string& msg_type, DataStream& vRecv,
                         const std::chrono::microseconds time_received, const std::atomic<bool>& interruptMsgProc) override
@@ -3758,6 +3762,13 @@ void PeerManagerImpl::ProcessMessage(CNode& pfrom, const std::string& msg_type, 
         if (nVersion < MIN_PEER_PROTO_VERSION) {
             // disconnect from peers older than this proto version
             LogPrint(BCLog::NET, "peer=%d using obsolete version %i; disconnecting\n", pfrom.GetId(), nVersion);
+            pfrom.fDisconnect = true;
+            return;
+        }
+
+        if (nVersion < PROTOCOL_VERSION && GetBestBlock() >= m_chainparams.GetConsensus().nDropLegacyHeight) {
+            // disconnect from legacy hosts once a blockheight has been met
+            LogPrint(BCLog::NET, "peer=%d using legacy version %i; disconnecting\n", pfrom.GetId(), nVersion);
             pfrom.fDisconnect = true;
             return;
         }
