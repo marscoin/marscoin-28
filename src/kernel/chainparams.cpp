@@ -37,14 +37,6 @@ auto consteval_ctor(auto&& input) { return input; }
 #define consteval_ctor(input) (input)
 #endif
 
-static void SearchForNewGenesis(CBlock& block, uint256& powLimit)
-{
-    while (UintToArith256(block.GetPoWHash()) > UintToArith256(powLimit)) {
-        ++block.nNonce;
-        printf("\r%08x", block.nNonce);
-    }
-}
-
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -108,7 +100,9 @@ public:
         consensus.powLimit = uint256{"00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60;
         consensus.nPowTargetSpacing = 2.5 * 60;
+        consensus.nASERTAnchor = 2999999;
         consensus.nASERTHalfLife = 2 * 60 * 60;
+        consensus.nASERTSpacing = 123;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.enforce_BIP94 = false;
         consensus.fPowNoRetargeting = false;
@@ -249,7 +243,9 @@ public:
         consensus.powLimit = uint256{"00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60;
         consensus.nPowTargetSpacing = 2.5 * 60;
+        consensus.nASERTAnchor = 100;
         consensus.nASERTHalfLife = 2 * 60 * 60;
+        consensus.nASERTSpacing = 123;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.enforce_BIP94 = false;
         consensus.fPowNoRetargeting = false;
@@ -284,7 +280,6 @@ public:
         m_assumed_chain_state_size = 0; // tbd
 
         genesis = CreateGenesisBlock(1732912000, 958757, 0x1e0ffff0, 1, 50 * COIN);
-//      SearchForNewGenesis(genesis, consensus.powLimit);
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256{"395427a340a27e01cf481c7001f6c1d1fdb3b3a1a0dfdb27ff14066444627e42"});
         assert(genesis.hashMerkleRoot == uint256{"b9594f964ad5d42bd99edbfaaeeec900cd0f7563a14d90982cf6675df98d7863"});
@@ -350,7 +345,9 @@ public:
         consensus.powLimit = uint256{"00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60;
         consensus.nPowTargetSpacing = 2.5 * 60;
+        consensus.nASERTAnchor = 100;
         consensus.nASERTHalfLife = 2 * 60 * 60;
+        consensus.nASERTSpacing = 123;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.enforce_BIP94 = true;
         consensus.fPowNoRetargeting = false;

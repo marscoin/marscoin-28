@@ -34,7 +34,7 @@ COutPoint MineBlock(const node::NodeContext&, std::shared_ptr<CBlock>& block);
 /** Prepare a block to be mined */
 std::shared_ptr<CBlock> PrepareBlock(const node::NodeContext&, const CScript& coinbase_scriptPubKey);
 std::shared_ptr<CBlock> PrepareBlock(const node::NodeContext& node, const CScript& coinbase_scriptPubKey,
-                                     const node::BlockAssembler::Options& assembler_options);
+                                     node::BlockAssembler::Options& assembler_options);
 
 /** RPC-like helper function, returns the generated coin */
 COutPoint generatetoaddress(const node::NodeContext&, const std::string& address);

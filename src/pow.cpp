@@ -12,38 +12,6 @@
 #include <primitives/block.h>
 #include <uint256.h>
 
-double GetMyDifficulty(const CBlockIndex* blockindex) {
-    if (blockindex == NULL) {
-        return 0;
-    }
-    int nShift = (blockindex->nBits >> 24) & 0xff;
-    double dDiff = (double)0x0000ffff / (double)(blockindex->nBits & 0x00ffffff);
-    while (nShift < 29) {
-        dDiff *= 256.0;
-        nShift++;
-    }
-    while (nShift > 29) {
-        dDiff /= 256.0;
-        nShift--;
-    }
-    return dDiff;
-}
-
-double TargetToMyDifficulty(const uint256& target) {
-    uint32_t compactTarget = UintToArith256(target).GetCompact();
-    int nShift = (compactTarget >> 24) & 0xff;
-    double dDiff = (double)0x0000ffff / (double)(compactTarget & 0x00ffffff);
-    while (nShift < 29) {
-        dDiff *= 256.0;
-        nShift++;
-    }
-    while (nShift > 29) {
-        dDiff /= 256.0;
-        nShift--;
-    }
-    return dDiff;
-}
-
 unsigned int DarkGravityWave2(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params) {
     /* current difficulty formula, darkcoin - DarkGravity v2, written by Evan Duffield - evan@darkcoin.io */
     const CBlockIndex *BlockLastSolved = pindexLast;
@@ -192,42 +160,23 @@ unsigned int DarkGravityWave3(const CBlockIndex* pindexLast, const CBlockHeader 
         bnNew = CBigNum(params.powLimit);
     }
 
-    //uint256 nextTarget = uint256(bnNew.GetCompact());
-    //LogPrint(BCLog::BENCH, "Next Target: %s\n", nextTarget.ToString());
-    //double nextDifficulty = TargetToMyDifficulty(nextTarget);
-    //LogPrintf("GW Next Target difficulty: %f\n", nextDifficulty);
-    //double currentDifficulty = GetMyDifficulty(pindexLast);
-    //LogPrintf("Current difficulty: %f\n", currentDifficulty);
-
     return bnNew.GetCompact();
 }
 
 unsigned int GravityAsert(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params) {
-    // Constants from the ASERT algorithm
-    const int64_t nHalfLife = 2 * 3600; // 2 hours in seconds
-    const int64_t nPowTargetSpacing = 123; // 2 Mars-minutes
-    const int32_t nAnchorHeight = 2999999; // Fixed anchor block height
-
-    LogPrintf("Starting GravityAsert calculation\n");
 
     // Check if we're at the genesis block or before the anchor block
-    if (pindexLast == NULL || pindexLast->nHeight < nAnchorHeight) {
-        LogPrintf("Anchor block at height %d. Not active yet.\n", nAnchorHeight);
+    if (pindexLast == NULL || pindexLast->nHeight < params.nASERTAnchor) {
         return CBigNum(params.powLimit).GetCompact();
     }
 
-    LogPrintf("Last block height: %d\n", pindexLast->nHeight);
-
     // Find the anchor block
     const CBlockIndex* pindexAnchor = pindexLast;
-    while (pindexAnchor && pindexAnchor->nHeight > nAnchorHeight) {
-        //LogPrintf("Traversing to block height: %d\n", pindexAnchor->nHeight);
+    while (pindexAnchor && pindexAnchor->nHeight > params.nASERTAnchor) {
         pindexAnchor = pindexAnchor->pprev;
     }
 
-    if (pindexAnchor == NULL || pindexAnchor->nHeight != nAnchorHeight) {
-        // This shouldn't happen if the blockchain is valid
-        LogPrintf("Error: Anchor block at height %d not found\n", nAnchorHeight);
+    if (pindexAnchor == NULL || pindexAnchor->nHeight != params.nASERTAnchor) {
         return CBigNum(params.powLimit).GetCompact();
     }
 
@@ -235,68 +184,41 @@ unsigned int GravityAsert(const CBlockIndex* pindexLast, const CBlockHeader *pbl
     int64_t nTimeDiff = pindexLast->GetBlockTime() - pindexAnchor->GetBlockTime();
     int64_t nHeightDiff = pindexLast->nHeight - pindexAnchor->nHeight;
 
-    LogPrintf("Time difference: %lld\n", nTimeDiff);
-    LogPrintf("Height difference: %lld\n", nHeightDiff);
-
     // Get the anchor block target
     CBigNum bnAnchorTarget;
     bnAnchorTarget.SetCompact(pindexAnchor->nBits);
 
-    LogPrintf("Anchor target set from bits: %u\n", pindexAnchor->nBits);
-
     // Calculate the exponent
-    int64_t exponent = ((nTimeDiff - nPowTargetSpacing * (nHeightDiff + 1)) * 65536) / nHalfLife;
-
-    LogPrintf("Calculated exponent: %lld\n", exponent);
+    int64_t exponent = ((nTimeDiff - params.nASERTSpacing * (nHeightDiff + 1)) * 65536) / params.nASERTHalfLife;
 
     // Decompose exponent into integer and fractional parts
     int64_t shifts = exponent >> 16;
     uint16_t frac = (uint16_t)exponent;
 
-    LogPrintf("Shifts (integer part of exponent): %lld\n", shifts);
-    LogPrintf("Fractional part of exponent: %u\n", frac);
-
     // Calculate the factor for the fractional part
     uint64_t factor = 65536ULL + ((195766423245049ULL * frac + 971821376ULL * frac * frac +
                                    5127ULL * frac * frac * frac + (1ULL << 47)) >> 48);
 
-    LogPrintf("Calculated factor: %llu\n", factor);
-
     // Calculate next target
     CBigNum bnNext = bnAnchorTarget * factor;
-
-    LogPrintf("Calculated next target before shift adjustments\n");
 
     // Apply the integer shifts
     shifts -= 16;
     if (shifts < 0) {
-        LogPrintf("Shifting right by: %lld\n", -shifts);
         bnNext >>= -shifts;
     } else if (shifts > 0) {
-        LogPrintf("Shifting left by: %lld\n", shifts);
         bnNext <<= shifts;
     }
 
     // Ensure the result is within bounds
     CBigNum bnPowLimit = CBigNum(params.powLimit);
     if (bnNext > bnPowLimit) {
-        LogPrintf("Adjusting next target to proof of work limit\n");
         bnNext = bnPowLimit;
     }
     if (bnNext == 0) {
-        LogPrintf("Adjusting next target from 0 to 1\n");
         bnNext = 1;
     }
 
-    // Log the results
-    LogPrintf("Anchor Target: %s\n", bnAnchorTarget.GetHex());
-    LogPrintf("Next Target: %s\n", bnNext.GetHex());
-    LogPrintf("Next Target uint: %s\n", bnNext.ToString());
-    double nextDifficulty = TargetToMyDifficulty(uint256S(bnNext.GetHex()));
-    LogPrintf("ASERT Next Target difficulty: %f\n", nextDifficulty);
-    double currentDifficulty = GetMyDifficulty(pindexLast);
-    LogPrintf("Current difficulty: %f\n", currentDifficulty);
-    LogPrintf("==GravityAsertComplete===================================\n");
     return bnNext.GetCompact();
 }
 
@@ -380,12 +302,6 @@ unsigned int GetNextWorkRequired_V1(const CBlockIndex* pindexLast, const CBlockH
 
     if (bnNew > UintToArith256(params.powLimit))
         bnNew = UintToArith256(params.powLimit);
-
-    /// debug print
-    LogPrintf("GetNextWorkRequired RETARGET\n");
-    LogPrintf("Params().TargetTimespan() = %d    nActualTimespan = %d\n", nTargetTimespan, nActualTimespan);
-    LogPrintf("Before: %08x  %s\n", pindexLast->nBits, bnOld.ToString());
-    LogPrintf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.ToString());
 
     return bnNew.GetCompact();
 }

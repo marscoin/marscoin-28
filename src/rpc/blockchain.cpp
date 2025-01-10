@@ -101,6 +101,26 @@ double GetDifficultyForBits(const uint32_t nBits)
     return dDiff;
 }
 
+double GetDifficulty(const CBlockIndex& blockindex)
+{
+    int nShift = (blockindex.nBits >> 24) & 0xff;
+    double dDiff =
+        (double)0x0000ffff / (double)(blockindex.nBits & 0x00ffffff);
+
+    while (nShift < 29)
+    {
+        dDiff *= 256.0;
+        nShift++;
+    }
+    while (nShift > 29)
+    {
+        dDiff /= 256.0;
+        nShift--;
+    }
+
+    return dDiff;
+}
+
 static int ComputeNextBlockAndDepth(const CBlockIndex& tip, const CBlockIndex& blockindex, const CBlockIndex*& next)
 {
     next = tip.GetAncestor(blockindex.nHeight + 1);
