@@ -180,17 +180,6 @@ bool HeadersSyncState::ValidateAndProcessSingleHeader(const CPureBlockHeader& cu
 
     int next_height = m_current_height + 1;
 
-    // Verify that the difficulty isn't growing too fast; an adversary with
-    // limited hashing capability has a greater chance of producing a high
-    // work chain if they compress the work into as few blocks as possible,
-    // so don't let anyone give a chain that would violate the difficulty
-    // adjustment maximum.
-    if (!PermittedDifficultyTransition(m_consensus_params, next_height,
-                m_last_header_received.nBits, current.nBits)) {
-        LogPrint(BCLog::NET, "Initial headers sync aborted with peer=%d: invalid difficulty transition at height=%i (presync phase)\n", m_id, next_height);
-        return false;
-    }
-
     if (next_height % HEADER_COMMITMENT_PERIOD == m_commit_offset) {
         // Add a commitment.
         m_header_commitments.push_back(m_hasher(current.GetHash()) & 1);
@@ -222,20 +211,6 @@ bool HeadersSyncState::ValidateAndStoreRedownloadedHeader(const CBlockHeader& he
     // downloading.
     if (header.hashPrevBlock != m_redownload_buffer_last_hash) {
         LogPrint(BCLog::NET, "Initial headers sync aborted with peer=%d: non-continuous headers at height=%i (redownload phase)\n", m_id, next_height);
-        return false;
-    }
-
-    // Check that the difficulty adjustments are within our tolerance:
-    uint32_t previous_nBits{0};
-    if (!m_redownloaded_headers.empty()) {
-        previous_nBits = m_redownloaded_headers.back().nBits;
-    } else {
-        previous_nBits = m_chain_start->nBits;
-    }
-
-    if (!PermittedDifficultyTransition(m_consensus_params, next_height,
-                previous_nBits, header.nBits)) {
-        LogPrint(BCLog::NET, "Initial headers sync aborted with peer=%d: invalid difficulty transition at height=%i (redownload phase)\n", m_id, next_height);
         return false;
     }
 
