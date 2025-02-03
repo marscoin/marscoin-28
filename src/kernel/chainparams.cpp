@@ -122,7 +122,7 @@ public:
         consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000002f03094770f3d455"};  //block 3100000
         consensus.defaultAssumeValid = uint256{"633d6ddcddb33dfd8392a3650e04c2c3e353be575fe923615476ad603055e147"}; //block 3100000
 
-        consensus.nDropLegacyHeight = std::numeric_limits<int>::max();
+        consensus.nDropLegacyHeight = 3145555;
 
         consensus.nAuxpowChainId = 0x029c;
         consensus.nAuxpowStartHeight = consensus.nDropLegacyHeight;
