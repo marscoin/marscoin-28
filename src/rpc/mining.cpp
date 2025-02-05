@@ -933,6 +933,10 @@ static RPCHelpMan getblocktemplate()
             }
         }
     }
+
+    // Enforce legacy blocks only via getblocktemplate
+    block.nVersion = CPureBlockHeader::VERSION_LEGACY;
+
     result.pushKV("version", block.nVersion);
     result.pushKV("rules", std::move(aRules));
     result.pushKV("vbavailable", std::move(vbavailable));
