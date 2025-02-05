@@ -26,6 +26,9 @@ private:
 
 public:
 
+    /* Version identifying a legacy blockheader */
+    static const int32_t VERSION_LEGACY = 4;
+
     /* Modifiers to the version.  */
     static const int32_t VERSION_AUXPOW = (1 << 8);
 
