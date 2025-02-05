@@ -113,8 +113,8 @@ static int AppInitRawTx(int argc, char* argv[])
             strUsage += FormatParagraph(LicenseInfo());
         } else {
             strUsage += "\n"
-                "Usage:  marscoin-tx [options] <hex-tx> [commands]  Update hex-encoded bitcoin transaction\n"
-                "or:     marscoin-tx [options] -create [commands]   Create hex-encoded bitcoin transaction\n"
+                "Usage:  marscoin-tx [options] <hex-tx> [commands]  Update hex-encoded marscoin transaction\n"
+                "or:     marscoin-tx [options] -create [commands]   Create hex-encoded marscoin transaction\n"
                 "\n";
             strUsage += gArgs.GetHelpMessage();
         }
