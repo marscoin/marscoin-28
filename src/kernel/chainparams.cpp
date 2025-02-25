@@ -122,10 +122,8 @@ public:
         consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000002f03094770f3d455"};  //block 3100000
         consensus.defaultAssumeValid = uint256{"633d6ddcddb33dfd8392a3650e04c2c3e353be575fe923615476ad603055e147"}; //block 3100000
 
-        consensus.nDropLegacyHeight = 3145555;
-
         consensus.nAuxpowChainId = 0x029c;
-        consensus.nAuxpowStartHeight = consensus.nDropLegacyHeight;
+        consensus.nAuxpowStartHeight = 3145555;
         consensus.nLegacyBlocksBefore = -1;
         consensus.fStrictChainId = true;
 
@@ -278,10 +276,8 @@ public:
         consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
         consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
 
-        consensus.nDropLegacyHeight = std::numeric_limits<int>::max();
-
         consensus.nAuxpowChainId = 0x029d;
-        consensus.nAuxpowStartHeight = consensus.nDropLegacyHeight;
+        consensus.nAuxpowStartHeight = std::numeric_limits<int>::max();
         consensus.nLegacyBlocksBefore = -1;
         consensus.fStrictChainId = true;
 
