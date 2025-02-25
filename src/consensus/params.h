@@ -160,9 +160,6 @@ struct Params {
     bool fStrictChainId;
     int nLegacyBlocksBefore; // -1 for "always allow"
 
-    /** Node parameters */
-    int nDropLegacyHeight;
-
     /**
      * Check whether or not minimum difficulty blocks are allowed
      * with the given time stamp.

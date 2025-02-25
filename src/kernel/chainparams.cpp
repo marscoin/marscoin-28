@@ -122,10 +122,8 @@ public:
         consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000002f03094770f3d455"};  //block 3100000
         consensus.defaultAssumeValid = uint256{"633d6ddcddb33dfd8392a3650e04c2c3e353be575fe923615476ad603055e147"}; //block 3100000
 
-        consensus.nDropLegacyHeight = 3145555;
-
         consensus.nAuxpowChainId = 0x029c;
-        consensus.nAuxpowStartHeight = consensus.nDropLegacyHeight;
+        consensus.nAuxpowStartHeight = 3145555;
         consensus.nLegacyBlocksBefore = -1;
         consensus.fStrictChainId = true;
 
@@ -212,6 +210,7 @@ public:
                 {  2925000, uint256{"6a1f826799ec6763a7a17c246c1d175ec2beab5733453b466943d4c98fdab40f"}},
                 {  3000000, uint256{"a01b0ce4f7d5dfd34eb77652f50dab55c5e6cee63f7c422366a8f893129be650"}},
                 {  3075000, uint256{"fdcab8b4d081316ae8e698d4c955625ef573390a145f54b6f4a3066d2ad70239"}},
+                {  3150000, uint256{"cd2ecbac21e33d8f925f266603f7927cd897d5a1398498364e1620de0d6cbaf5"}},
             }
         };
 
@@ -278,10 +277,8 @@ public:
         consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
         consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
 
-        consensus.nDropLegacyHeight = std::numeric_limits<int>::max();
-
         consensus.nAuxpowChainId = 0x029d;
-        consensus.nAuxpowStartHeight = consensus.nDropLegacyHeight;
+        consensus.nAuxpowStartHeight = std::numeric_limits<int>::max();
         consensus.nLegacyBlocksBefore = -1;
         consensus.fStrictChainId = true;
 

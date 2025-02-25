@@ -3766,13 +3766,6 @@ void PeerManagerImpl::ProcessMessage(CNode& pfrom, const std::string& msg_type, 
             return;
         }
 
-        if (nVersion < PROTOCOL_VERSION && GetBestBlock() >= m_chainparams.GetConsensus().nDropLegacyHeight) {
-            // disconnect from legacy hosts once a blockheight has been met
-            LogPrint(BCLog::NET, "peer=%d using legacy version %i; disconnecting\n", pfrom.GetId(), nVersion);
-            pfrom.fDisconnect = true;
-            return;
-        }
-
         if (!vRecv.empty()) {
             // The version message includes information about the sending node which we don't use:
             //   - 8 bytes (service bits)
