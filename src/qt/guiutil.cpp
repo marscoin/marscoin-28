@@ -111,12 +111,12 @@ static std::string DummyAddress(const CChainParams &params)
     std::string addr;
     switch (params.GetChainType()) {
     case ChainType::MAIN:
-        addr = "bc1p35yvjel7srp783ztf8v6jdra7dhfzk5jaun8xz2qp6ws7z80n4tq2jku9f";
+        addr = "mars1p3ymu5kvlt7s6j2h6a8epgwtqu5u7gtw6lffv8lmxw6uhde3aq0wq2u7eel";
         break;
     case ChainType::SIGNET:
     case ChainType::TESTNET:
     case ChainType::TESTNET4:
-        addr = "tb1p35yvjel7srp783ztf8v6jdra7dhfzk5jaun8xz2qp6ws7z80n4tqa6qnlg";
+        addr = "tmars1pwc2phvt4cyfnwr52z783u7yff5k8r9rpaz3g6v4fpf652jxr3gus5sdswe";
         break;
     case ChainType::REGTEST:
         addr = "bcrt1p35yvjel7srp783ztf8v6jdra7dhfzk5jaun8xz2qp6ws7z80n4tqsr2427";
